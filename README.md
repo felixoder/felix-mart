@@ -1,53 +1,76 @@
-# Welcome to your Lovable project
+# Luxe Craft Shop - Premium E-commerce Store
 
-## Project info
+A modern, full-featured e-commerce platform built with React, TypeScript, Tailwind CSS, and Supabase, featuring integrated Cashfree payment processing.
 
-**URL**: https://lovable.dev/projects/d63ea0c7-2d4b-4011-92d5-ad90d5ba0a0c
+## 🌟 Features
 
-## How can I edit this code?
+- **Complete E-commerce Solution**: Product catalog, shopping cart, user authentication
+- **Cashfree Payment Integration**: Secure payment processing with Cashfree PG
+- **Admin Panel**: Product management, inventory control, order management
+- **Responsive Design**: Modern UI with Tailwind CSS and Shadcn/UI components
+- **Real-time Database**: Powered by Supabase with Row Level Security
+- **User Management**: Authentication, profiles, and order history
 
-There are several ways of editing your application.
+## 🚀 Quick Start
 
-**Use Lovable**
+### Prerequisites
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/d63ea0c7-2d4b-4011-92d5-ad90d5ba0a0c) and start prompting.
+- Node.js & npm installed
+- Supabase account
+- Cashfree account (for payments)
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+### Installation
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# Clone the repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Navigate to project directory
+cd luxe-craft-shop
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## 💳 Payment Integration
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+This project includes a complete **Cashfree payment integration**. For detailed setup instructions, testing, and deployment, see:
 
-**Use GitHub Codespaces**
+**📖 [Cashfree Integration Guide](./CASHFREE_INTEGRATION_GUIDE.md)**
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
+The guide includes:
+- Environment setup
+- Database configuration
+- Payment flow testing
+- Troubleshooting
+- Production deployment
+
+## 🛠️ Development
+
+### Project Structure
+
+```
+src/
+  ├── components/     # Reusable UI components
+  ├── pages/         # Main application pages
+  ├── hooks/         # Custom React hooks
+  ├── lib/           # Utility functions
+  └── integrations/  # External service integrations
+
+supabase/
+  ├── functions/     # Edge functions for payments
+  └── migrations/    # Database schema and data
+```
+
+### Key Components
+
+- **Checkout Flow**: Complete payment processing with Cashfree
+- **Order Management**: Track orders and payment status
+- **Admin Dashboard**: Product and inventory management
+- **User Authentication**: Secure login and user profiles
 - Edit files directly within the Codespace and commit and push your changes once you're done.
 
 ## What technologies are used for this project?

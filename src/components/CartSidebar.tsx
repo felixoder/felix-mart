@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { ShoppingCart, Plus, Minus, Trash2, X } from "lucide-react";
+import { Link } from "react-router-dom";
 import {
   Sheet,
   SheetContent,
@@ -13,6 +14,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { useNavigate } from "react-router-dom";
 
 interface CartItem {
   id: string;
@@ -37,50 +39,78 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (isOpen && userId) {
+    if (isOpen) {
       fetchCartItems();
     }
   }, [isOpen, userId]);
 
   const fetchCartItems = async () => {
-    if (!userId) return;
-
     setLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from("cart_items")
-        .select(`
-          id,
-          product_id,
-          quantity,
-          products (
+    if (userId) {
+      try {
+        const { data, error } = await supabase
+          .from("cart_items")
+          .select(`
             id,
-            name,
-            price,
-            image_url,
-            stock_quantity
-          )
-        `)
-        .eq("user_id", userId);
+            product_id,
+            quantity,
+            products (
+              id,
+              name,
+              price,
+              image_url,
+              stock_quantity
+            )
+          `)
+          .eq("user_id", userId);
 
-      if (error) throw error;
+        if (error) throw error;
 
-      const formattedData = data?.map(item => ({
-        ...item,
-        product: item.products as any
-      })) || [];
+        const formattedData = data?.map(item => ({
+          ...item,
+          product: item.products as any
+        })) || [];
 
-      setCartItems(formattedData);
-    } catch (error) {
-      console.error("Error fetching cart items:", error);
-      toast({
-        title: "Error",
-        description: "Failed to load cart items",
-        variant: "destructive",
-      });
-    } finally {
+        setCartItems(formattedData);
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load cart items",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      // Fetch from local storage for guest
+      const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+      if (guestCart.length > 0) {
+        const productIds = guestCart.map((item: any) => item.product_id);
+        const { data: products, error } = await supabase
+          .from("products")
+          .select("*")
+          .in("id", productIds);
+
+        if (error) {
+          toast({
+            title: "Error",
+            description: "Failed to fetch cart items",
+            variant: "destructive",
+          });
+          setLoading(false);
+          return;
+        }
+
+        const items = guestCart.map((item: any) => {
+          const product = products.find((p: any) => p.id === item.product_id);
+          return { ...item, product };
+        });
+        setCartItems(items);
+      }
       setLoading(false);
     }
   };
@@ -91,56 +121,73 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
       return;
     }
 
-    try {
-      const { error } = await supabase
-        .from("cart_items")
-        .update({ quantity: newQuantity })
-        .eq("id", itemId);
+    if (userId) {
+      try {
+        const { error } = await supabase
+          .from("cart_items")
+          .update({ quantity: newQuantity })
+          .eq("id", itemId);
 
-      if (error) throw error;
+        if (error) throw error;
 
-      setCartItems(items =>
-        items.map(item =>
-          item.id === itemId ? { ...item, quantity: newQuantity } : item
-        )
-      );
+        setCartItems(items =>
+          items.map(item =>
+            item.id === itemId ? { ...item, quantity: newQuantity } : item
+          )
+        );
 
-      toast({
-        title: "Success",
-        description: "Cart updated",
-      });
-    } catch (error) {
-      console.error("Error updating cart:", error);
-      toast({
-        title: "Error",
-        description: "Failed to update cart",
-        variant: "destructive",
-      });
+        toast({
+          title: "Success",
+          description: "Cart updated",
+        });
+      } catch (error) {
+        console.error("Error updating cart:", error);
+        toast({
+          title: "Error",
+          description: "Failed to update cart",
+          variant: "destructive",
+        });
+      }
+    } else {
+      const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+      const itemIndex = guestCart.findIndex((item: any) => item.product_id === itemId);
+      if (itemIndex > -1) {
+        guestCart[itemIndex].quantity = newQuantity;
+      }
+      localStorage.setItem("guestCart", JSON.stringify(guestCart));
+      fetchCartItems();
     }
   };
 
   const removeItem = async (itemId: string) => {
-    try {
-      const { error } = await supabase
-        .from("cart_items")
-        .delete()
-        .eq("id", itemId);
+    if (userId) {
+      try {
+        const { error } = await supabase
+          .from("cart_items")
+          .delete()
+          .eq("id", itemId);
 
-      if (error) throw error;
+        if (error) throw error;
 
-      setCartItems(items => items.filter(item => item.id !== itemId));
+        setCartItems(items => items.filter(item => item.id !== itemId));
 
-      toast({
-        title: "Success",
-        description: "Item removed from cart",
-      });
-    } catch (error) {
-      console.error("Error removing item:", error);
-      toast({
-        title: "Error",
-        description: "Failed to remove item",
-        variant: "destructive",
-      });
+        toast({
+          title: "Success",
+          description: "Item removed from cart",
+        });
+      } catch (error) {
+        console.error("Error removing item:", error);
+        toast({
+          title: "Error",
+          description: "Failed to remove item",
+          variant: "destructive",
+        });
+      }
+    } else {
+      const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+      const updatedCart = guestCart.filter((item: any) => item.product_id !== itemId);
+      localStorage.setItem("guestCart", JSON.stringify(updatedCart));
+      fetchCartItems();
     }
   };
 
@@ -180,7 +227,7 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
               <ScrollArea className="flex-1 -mx-6 px-6">
                 <div className="space-y-4">
                   {cartItems.map((item) => (
-                    <div key={item.id} className="flex gap-4 py-4">
+                    <div key={item.product_id} className="flex gap-4 py-4">
                       <div className="relative">
                         <img
                           src={item.product.image_url || "/placeholder.svg"}
@@ -201,7 +248,7 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
                               variant="outline"
                               size="icon"
                               className="h-8 w-8"
-                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                              onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
                             >
                               <Minus className="h-3 w-3" />
                             </Button>
@@ -212,7 +259,7 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
                               variant="outline"
                               size="icon"
                               className="h-8 w-8"
-                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                              onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
                               disabled={item.quantity >= item.product.stock_quantity}
                             >
                               <Plus className="h-3 w-3" />
@@ -221,7 +268,7 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
                               variant="ghost"
                               size="icon"
                               className="h-8 w-8 text-destructive hover:text-destructive"
-                              onClick={() => removeItem(item.id)}
+                              onClick={() => removeItem(item.product_id)}
                             >
                               <Trash2 className="h-3 w-3" />
                             </Button>
@@ -238,7 +285,13 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
                   <span>Total:</span>
                   <span>${getTotalPrice().toFixed(2)}</span>
                 </div>
-                <Button className="w-full btn-premium">
+                <Button
+                  className="w-full btn-premium"
+                  onClick={() => {
+                    onClose();
+                    navigate("/checkout");
+                  }}
+                >
                   Proceed to Checkout
                 </Button>
               </div>

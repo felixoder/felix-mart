@@ -52,6 +52,10 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+                'inactive-tab': {
+                    DEFAULT: 'hsl(var(--inactive-tab))',
+                    foreground: 'hsl(var(--inactive-tab-foreground))'
+                },
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',

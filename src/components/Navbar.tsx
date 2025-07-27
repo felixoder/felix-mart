@@ -88,6 +88,16 @@ export const Navbar = ({ user, cartItemsCount, onCartClick }: NavbarProps) => {
       >
         Products
       </a>
+      {user && (
+        <a
+          href="/orders"
+          className={`${
+            mobile ? "block py-2" : "inline-flex"
+          } text-white hover:text-white/80 transition-colors`}
+        >
+          My Orders
+        </a>
+      )}
       {isAdmin && (
         <a
           href="/admin"
@@ -118,21 +128,19 @@ export const Navbar = ({ user, cartItemsCount, onCartClick }: NavbarProps) => {
 
           {/* Right side */}
           <div className="flex items-center space-x-4">
-            {user && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={onCartClick}
-                className="relative text-white hover:bg-white/20"
-              >
-                <ShoppingCart className="h-5 w-5" />
-                {cartItemsCount > 0 && (
-                  <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center text-xs bg-destructive text-destructive-foreground">
-                    {cartItemsCount}
-                  </Badge>
-                )}
-              </Button>
-            )}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onCartClick}
+              className="relative text-white hover:bg-white/20"
+            >
+              <ShoppingCart className="h-5 w-5" />
+              {cartItemsCount > 0 && (
+                <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center text-xs bg-destructive text-destructive-foreground">
+                  {cartItemsCount}
+                </Badge>
+              )}
+            </Button>
 
             {user ? (
               <DropdownMenu>

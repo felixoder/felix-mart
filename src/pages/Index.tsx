@@ -41,7 +41,9 @@ const Index = () => {
         if (session?.user) {
           getCartItemsCount(session.user.id);
         } else {
-          setCartItemsCount(0);
+          const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+          const totalCount = guestCart.reduce((sum: number, item: any) => sum + item.quantity, 0);
+          setCartItemsCount(totalCount);
         }
       }
     );
@@ -52,6 +54,10 @@ const Index = () => {
       setUser(session?.user ?? null);
       if (session?.user) {
         getCartItemsCount(session.user.id);
+      } else {
+        const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+        const totalCount = guestCart.reduce((sum: number, item: any) => sum + item.quantity, 0);
+        setCartItemsCount(totalCount);
       }
     });
 
@@ -126,10 +132,22 @@ const Index = () => {
 
   const addToCart = async (productId: string) => {
     if (!user) {
+      // Handle guest cart using local storage
+      const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+      const existingItemIndex = guestCart.findIndex((item: any) => item.product_id === productId);
+
+      if (existingItemIndex > -1) {
+        guestCart[existingItemIndex].quantity += 1;
+      } else {
+        guestCart.push({ product_id: productId, quantity: 1 });
+      }
+
+      localStorage.setItem("guestCart", JSON.stringify(guestCart));
+      const totalCount = guestCart.reduce((sum: number, item: any) => sum + item.quantity, 0);
+      setCartItemsCount(totalCount);
       toast({
-        title: "Sign in required",
-        description: "Please sign in to add items to cart",
-        variant: "destructive",
+        title: "Success",
+        description: "Product added to cart",
       });
       return;
     }
@@ -176,81 +194,6 @@ const Index = () => {
     }
   };
 
-  if (!user) {
-    return (
-      <div className="min-h-screen gradient-hero">
-        <div className="absolute inset-0 bg-black/30"></div>
-        <div className="relative z-10 min-h-screen flex flex-col">
-          {/* Header */}
-          <div className="flex justify-between items-center p-6">
-            <div className="flex items-center space-x-2">
-              <Store className="h-8 w-8 text-white glow" />
-              <span className="text-xl font-bold text-white">Premium Store</span>
-            </div>
-            <Button
-              onClick={() => window.location.href = "/auth"}
-              className="btn-glass"
-            >
-              Sign In
-            </Button>
-          </div>
-
-          {/* Hero Section */}
-          <div className="flex-1 flex items-center justify-center px-6">
-            <div className="text-center max-w-4xl mx-auto">
-              <div className="animate-float mb-8">
-                <Store className="h-24 w-24 text-white mx-auto glow" />
-              </div>
-              <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-                Premium Shopping
-                <span className="block text-white/80">Experience</span>
-              </h1>
-              <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-2xl mx-auto">
-                Discover curated products with unmatched quality and style. Your luxury shopping destination awaits.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  size="lg"
-                  onClick={() => window.location.href = "/auth"}
-                  className="btn-glass text-lg px-8 py-6"
-                >
-                  Start Shopping
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="text-lg px-8 py-6 glass text-white border-white/30 hover:bg-white/10"
-                >
-                  Explore Products
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Features */}
-          <div className="p-6">
-            <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="glass p-6 rounded-lg text-center">
-                <Truck className="h-8 w-8 text-white mx-auto mb-4 glow" />
-                <h3 className="text-lg font-semibold text-white mb-2">Free Shipping</h3>
-                <p className="text-white/80">Fast and secure delivery worldwide</p>
-              </div>
-              <div className="glass p-6 rounded-lg text-center">
-                <Shield className="h-8 w-8 text-white mx-auto mb-4 glow" />
-                <h3 className="text-lg font-semibold text-white mb-2">Secure Payments</h3>
-                <p className="text-white/80">Your transactions are protected</p>
-              </div>
-              <div className="glass p-6 rounded-lg text-center">
-                <Clock className="h-8 w-8 text-white mx-auto mb-4 glow" />
-                <h3 className="text-lg font-semibold text-white mb-2">24/7 Support</h3>
-                <p className="text-white/80">Always here to help you</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background">

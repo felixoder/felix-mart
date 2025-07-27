@@ -6,12 +6,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Store, Lock, Mail } from "lucide-react";
+import { Loader2, Store, Lock, Mail, Eye, EyeOff } from "lucide-react";
 
 export const AuthForm = () => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [fullName, setFullName] = useState("");
   const { toast } = useToast();
 
@@ -36,6 +37,11 @@ export const AuthForm = () => {
           title: "Success",
           description: "Welcome back!",
         });
+        const redirectUrl = localStorage.getItem('redirectUrl');
+        if (redirectUrl) {
+          localStorage.removeItem('redirectUrl');
+          window.location.href = redirectUrl;
+        }
       }
     } catch (error) {
       toast({
@@ -103,10 +109,10 @@ export const AuthForm = () => {
         <CardContent>
           <Tabs defaultValue="signin" className="w-full">
             <TabsList className="grid w-full grid-cols-2 glass">
-              <TabsTrigger value="signin" className="text-white data-[state=active]:bg-white/20">
+              <TabsTrigger value="signin" className="text-white data-[state=active]:bg-white/20 data-[state=inactive]:text-inactive-tab-foreground">
                 Sign In
               </TabsTrigger>
-              <TabsTrigger value="signup" className="text-white data-[state=active]:bg-white/20">
+              <TabsTrigger value="signup" className="text-white data-[state=active]:bg-white/20 data-[state=inactive]:text-inactive-tab-foreground">
                 Sign Up
               </TabsTrigger>
             </TabsList>
@@ -114,7 +120,7 @@ export const AuthForm = () => {
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-white">Email</Label>
+                  <Label htmlFor="email" className="text-foreground">Email</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-white/60" />
                     <Input
@@ -124,23 +130,30 @@ export const AuthForm = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="pl-10 glass text-white placeholder:text-white/60"
+                      className="pl-10 glass placeholder:text-white/60"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-white">Password</Label>
+                  <Label htmlFor="password" className="text-foreground">Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-white/60" />
                     <Input
                       id="password"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      className="pl-10 glass text-white placeholder:text-white/60"
+                      className="pl-10 glass placeholder:text-white/60"
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-3 text-white/60 z-10"
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
                   </div>
                 </div>
                 <Button
@@ -163,19 +176,21 @@ export const AuthForm = () => {
             <TabsContent value="signup">
               <form onSubmit={handleSignUp} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="fullName" className="text-white">Full Name</Label>
-                  <Input
-                    id="fullName"
-                    type="text"
-                    placeholder="Enter your full name"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    required
-                    className="glass text-white placeholder:text-white/60"
-                  />
+                  <Label htmlFor="fullName" className="text-foreground">Full Name</Label>
+                  <div className="relative">
+                    <Input
+                      id="fullName"
+                      type="text"
+                      placeholder="Enter your full name"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      required
+                      className="glass placeholder:text-white/60"
+                    />
+                  </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email" className="text-white">Email</Label>
+                  <Label htmlFor="signup-email" className="text-foreground">Email</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-white/60" />
                     <Input
@@ -185,23 +200,30 @@ export const AuthForm = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="pl-10 glass text-white placeholder:text-white/60"
+                      className="pl-10 glass placeholder:text-white/60"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password" className="text-white">Password</Label>
+                  <Label htmlFor="signup-password" className="text-foreground">Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-white/60" />
                     <Input
                       id="signup-password"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       placeholder="Create a password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      className="pl-10 glass text-white placeholder:text-white/60"
+                      className="pl-10 glass placeholder:text-white/60"
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-3 text-white/60 z-10"
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
                   </div>
                 </div>
                 <Button

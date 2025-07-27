@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "cashfree-pg-api-wrapper": "https://deno.land/x/cashfree_pg_api_wrapper@v1.0.1/mod.ts"
+  }
+}
