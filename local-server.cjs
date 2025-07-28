@@ -1,9 +1,21 @@
 const express = require('express');
 const cors = require('cors');
+const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
 
 const app = express();
 const PORT = 3001;
+
+// Supabase configuration - using service role key for admin operations
+const SUPABASE_URL = "https://kwsqhrqhtcuacfvmxwji.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3c3FocnFodGN1YWNmdm14d2ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM1NDEyNTgsImV4cCI6MjA2OTExNzI1OH0.w677z2scEUSeLvsVqA3pPBUx0TihKB3LP1QuedLgqvQ";
+
+// For production, you would use the service role key here
+// const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+// const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+
+// For now, we'll use the anon client
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Middleware
 app.use(cors({
@@ -43,8 +55,12 @@ app.use((req, res, next) => {
 const clientId = process.env.CASHFREE_CLIENT_ID || '';
 const clientSecret = process.env.CASHFREE_CLIENT_SECRET || '';
 
-// Force disable mock mode - use real Cashfree API
-const isProductionCredentials = clientSecret.includes('prod') || clientSecret.length > 50;
+// Detect production vs test credentials
+const isProductionCredentials = clientSecret.includes('prod');
+const isTestCredentials = clientId.startsWith('TEST');
+
+// Determine API base URL - use sandbox for test credentials
+const CASHFREE_API_BASE = isTestCredentials ? 'https://sandbox.cashfree.com/pg' : 'https://api.cashfree.com/pg';
 
 const MOCK_MODE = false; // DISABLED - Use real Cashfree API directly
 
@@ -53,6 +69,8 @@ console.log('📊 Environment:', process.env.NODE_ENV || 'development');
 console.log('🔑 Client ID:', clientId.substring(0, 8) + '...');
 console.log('🔑 Secret contains "prod":', clientSecret.includes('prod'));
 console.log('🔑 Using production credentials:', isProductionCredentials);
+console.log('🔑 Using test credentials:', isTestCredentials);
+console.log('🌐 API Base URL:', CASHFREE_API_BASE);
 console.log('🎭 Mock mode:', MOCK_MODE ? 'ENABLED (Safe for testing)' : 'DISABLED');
 
 if (MOCK_MODE) {
@@ -80,14 +98,14 @@ app.post('/functions/v1/cashfree-checkout', async (req, res) => {
         customer_phone: req.body.customer_phone
       },
       order_meta: {
-        return_url: 'https://webhook.site/#!/unique-url-here', // Temporary for testing - replace with your domain
-        notify_url: 'https://webhook.site/#!/unique-url-here'  // Temporary for testing - replace with your domain
+        return_url: `http://localhost:5175/order-success?order_id={order_id}`, // Return to your app
+        notify_url: 'http://localhost:3001/functions/v1/verify-payment'  // Use local server for webhooks
       }
     };
 
     console.log('📤 Calling Cashfree Production API with:', orderData);
 
-    const response = await fetch('https://api.cashfree.com/pg/orders', {
+    const response = await fetch(`${CASHFREE_API_BASE}/orders`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -120,13 +138,18 @@ app.post('/functions/v1/cashfree-checkout', async (req, res) => {
 // Verify payment endpoint
 app.post('/functions/v1/verify-payment', async (req, res) => {
   try {
-    console.log('🔍 Payment verification request:', req.body);
+    console.log('🔍 Payment verification request received:', req.body);
 
     // Real API call using production Cashfree credentials
     const orderId = req.body.order_id;
+    const sessionId = req.body.payment_session_id;
     console.log('📤 Verifying payment for order:', orderId);
+    console.log('📤 Payment session ID:', sessionId);
 
-    const response = await fetch(`https://api.cashfree.com/pg/orders/${orderId}`, {
+    const cashfreeUrl = `${CASHFREE_API_BASE}/orders/${orderId}`;
+    console.log('📤 Making request to Cashfree:', cashfreeUrl);
+
+    const response = await fetch(cashfreeUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -136,21 +159,154 @@ app.post('/functions/v1/verify-payment', async (req, res) => {
       }
     });
 
+    console.log('📤 Cashfree response status:', response.status);
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('❌ Payment verification error:', response.status, errorText);
-      throw new Error(`Payment verification failed: ${response.status} - ${errorText}`);
+      res.status(response.status).json({ 
+        error: 'Payment verification failed',
+        details: errorText,
+        order_id: orderId
+      });
+      return;
     }
 
     const result = await response.json();
-    console.log('✅ Real payment verified:', result);
-    res.json(result);
+    console.log('✅ Raw Cashfree response:', JSON.stringify(result, null, 2));
+    
+    // Ensure consistent response format for frontend
+    const mappedResult = {
+      ...result,
+      // Map Cashfree response fields to expected format
+      order_status: result.order_status,
+      payment_status: result.order_status === 'PAID' ? 'SUCCESS' : result.order_status,
+      order_id: result.order_id || result.cf_order_id,
+      payment_session_id: result.payment_session_id || sessionId
+    };
+    
+    console.log('📤 Mapped response being sent to frontend:', JSON.stringify(mappedResult, null, 2));
+    res.json(mappedResult);
 
   } catch (error) {
     console.error('❌ Payment verification error:', error);
     res.status(500).json({ 
       error: 'Failed to verify payment',
       details: error.message 
+    });
+  }
+});
+
+// Debug endpoint for testing payment verification
+app.post('/debug/verify-payment', async (req, res) => {
+  try {
+    console.log('🔍 Debug payment verification request:', req.body);
+    
+    // Return a mock successful payment verification for testing
+    const mockSuccessResponse = {
+      order_id: req.body.order_id || 'test_order_id',
+      order_status: 'PAID',
+      payment_status: 'SUCCESS',
+      payment_session_id: req.body.payment_session_id || 'test_session_id',
+      order_amount: 100.00,
+      order_currency: 'INR',
+      payment_time: new Date().toISOString()
+    };
+    
+    console.log('📤 Mock payment verification response:', mockSuccessResponse);
+    res.json(mockSuccessResponse);
+    
+  } catch (error) {
+    console.error('❌ Debug verification error:', error);
+    res.status(500).json({ 
+      error: 'Debug verification failed',
+      details: error.message 
+    });
+  }
+});
+
+// Update order status endpoint
+app.post('/functions/v1/update-order-status', async (req, res) => {
+  try {
+    console.log('🔄 Order status update request:', req.body);
+    
+    const { order_id, status, user_id } = req.body;
+    
+    if (!order_id || !status) {
+      return res.status(400).json({
+        error: 'Missing required fields',
+        details: 'order_id and status are required'
+      });
+    }
+    
+    console.log(`📝 Attempting to update order ${order_id} to status: ${status}`);
+    
+    try {
+      // First, let's check if the order exists
+      const { data: existingOrder, error: queryError } = await supabase
+        .from('orders')
+        .select('id, status, user_id')
+        .eq('id', order_id)
+        .single();
+        
+      if (queryError) {
+        console.error('❌ Failed to find order:', queryError);
+        return res.status(404).json({
+          error: 'Order not found',
+          details: queryError.message,
+          order_id: order_id
+        });
+      }
+      
+      console.log('📋 Found existing order:', existingOrder);
+      
+      // Now try to update the order
+      const { data, error } = await supabase
+        .from('orders')
+        .update({ status: status })
+        .eq('id', order_id)
+        .select();
+        
+      if (error) {
+        console.error('❌ Database update failed:', error);
+        return res.status(500).json({
+          error: 'Database update failed',
+          details: error.message,
+          order_id: order_id,
+          attempted_status: status,
+          existing_order: existingOrder,
+          solution: 'RLS policy may be preventing this update. User needs admin privileges or RLS policy needs to be updated.'
+        });
+      }
+      
+      console.log('✅ Database update successful:', data);
+      console.log('📊 Number of rows updated:', data ? data.length : 0);
+      
+      res.json({
+        order_id,
+        old_status: existingOrder.status,
+        new_status: status,
+        updated_at: new Date().toISOString(),
+        success: true,
+        database_result: data,
+        rows_updated: data ? data.length : 0
+      });
+      
+    } catch (dbError) {
+      console.error('❌ Database error:', dbError);
+      res.status(500).json({
+        error: 'Database connection failed',
+        details: dbError.message,
+        order_id: order_id,
+        attempted_status: status
+      });
+    }
+    
+  } catch (error) {
+    console.error('❌ Order status update error:', error);
+    res.status(500).json({
+      error: 'Failed to update order status',
+      details: error.message
     });
   }
 });

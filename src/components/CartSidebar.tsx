@@ -121,6 +121,17 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
       return;
     }
 
+    // Find the item to check stock
+    const item = cartItems.find(cartItem => cartItem.id === itemId);
+    if (item && newQuantity > item.product.stock_quantity) {
+      toast({
+        title: "Insufficient Stock",
+        description: `Only ${item.product.stock_quantity} units available`,
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (userId) {
       try {
         const { error } = await supabase
@@ -195,6 +206,14 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
     return cartItems.reduce((total, item) => total + (item.product.price * item.quantity), 0);
   };
 
+  const getDeliveryCharge = () => {
+    return cartItems.length > 0 ? 70 : 0; // ₹70 delivery charge if there are items
+  };
+
+  const getFinalTotal = () => {
+    return getTotalPrice() + getDeliveryCharge();
+  };
+
   const getTotalItems = () => {
     return cartItems.reduce((total, item) => total + item.quantity, 0);
   };
@@ -240,9 +259,14 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
                           {item.product.name}
                         </h4>
                         <div className="flex items-center justify-between">
-                          <span className="text-sm font-semibold">
-                            ${item.product.price.toFixed(2)}
-                          </span>
+                          <div className="flex flex-col">
+                            <span className="text-sm font-semibold">
+                              ₹{item.product.price.toFixed(2)}
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              {item.product.stock_quantity} available
+                            </span>
+                          </div>
                           <div className="flex items-center gap-2">
                             <Button
                               variant="outline"
@@ -281,9 +305,19 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
               </ScrollArea>
 
               <div className="space-y-4 pt-4 border-t">
-                <div className="flex items-center justify-between text-lg font-semibold">
-                  <span>Total:</span>
-                  <span>${getTotalPrice().toFixed(2)}</span>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span>Subtotal:</span>
+                    <span>₹{getTotalPrice().toFixed(2)}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Delivery Charge:</span>
+                    <span>₹{getDeliveryCharge().toFixed(2)}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-lg font-semibold border-t pt-2">
+                    <span>Total:</span>
+                    <span>₹{getFinalTotal().toFixed(2)}</span>
+                  </div>
                 </div>
                 <Button
                   className="w-full btn-premium"

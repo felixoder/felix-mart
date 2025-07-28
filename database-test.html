@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Update Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .form-group { margin: 20px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 12px 24px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+        .result { margin-top: 20px; padding: 15px; border-radius: 4px; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .info { background: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Database Update Test</h1>
+        <p>Test if the current user can update order status directly in the database.</p>
+        
+        <div class="form-group">
+            <label for="orderId">Order ID:</label>
+            <input type="text" id="orderId" placeholder="Enter order ID to test">
+        </div>
+        
+        <div class="form-group">
+            <label for="newStatus">New Status:</label>
+            <select id="newStatus">
+                <option value="pending">Pending</option>
+                <option value="paid">Paid</option>
+                <option value="failed">Failed</option>
+                <option value="delivered">Delivered</option>
+            </select>
+        </div>
+        
+        <button onclick="signIn()">Sign In First</button>
+        <button onclick="testDirectUpdate()">Test Direct Database Update</button>
+        <button onclick="checkCurrentUser()">Check Current User</button>
+        <button onclick="listUserOrders()">List My Orders</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Initialize Supabase client
+        const supabase = window.supabase.createClient(
+            'https://kwsqhrqhtcuacfvmxwji.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3c3FocnFodGN1YWNmdm14d2ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM1NDEyNTgsImV4cCI6MjA2OTExNzI1OH0.w677z2scEUSeLvsVqA3pPBUx0TihKB3LP1QuedLgqvQ'
+        );
+        
+        async function signIn() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="result info">Opening sign-in...</div>';
+            
+            // Redirect to your app's auth page
+            window.open('http://localhost:5176/auth', '_blank');
+            
+            resultDiv.innerHTML = '<div class="result info">Please sign in to your app and come back to test.</div>';
+        }
+        
+        async function checkCurrentUser() {
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                
+                if (error) {
+                    resultDiv.innerHTML = `<div class="result error">Error getting session: ${error.message}</div>`;
+                    return;
+                }
+                
+                if (!session) {
+                    resultDiv.innerHTML = '<div class="result error">No user session. Please sign in first.</div>';
+                    return;
+                }
+                
+                resultDiv.innerHTML = `
+                    <div class="result success">
+                        <h3>Current User Session</h3>
+                        <p><strong>User ID:</strong> ${session.user.id}</p>
+                        <p><strong>Email:</strong> ${session.user.email}</p>
+                        <p><strong>Session Valid:</strong> Yes</p>
+                        <p>You can now test database operations.</p>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function listUserOrders() {
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                
+                if (!session) {
+                    resultDiv.innerHTML = '<div class="result error">Please sign in first.</div>';
+                    return;
+                }
+                
+                const { data, error } = await supabase
+                    .from('orders')
+                    .select('id, status, total_amount, created_at')
+                    .eq('user_id', session.user.id)
+                    .order('created_at', { ascending: false })
+                    .limit(10);
+                
+                if (error) {
+                    resultDiv.innerHTML = `<div class="result error">Error fetching orders: ${error.message}</div>`;
+                    return;
+                }
+                
+                if (!data || data.length === 0) {
+                    resultDiv.innerHTML = '<div class="result info">No orders found for this user.</div>';
+                    return;
+                }
+                
+                const ordersList = data.map(order => 
+                    `<tr>
+                        <td>${order.id}</td>
+                        <td>${order.status}</td>
+                        <td>₹${order.total_amount}</td>
+                        <td>${new Date(order.created_at).toLocaleDateString()}</td>
+                    </tr>`
+                ).join('');
+                
+                resultDiv.innerHTML = `
+                    <div class="result success">
+                        <h3>Your Orders</h3>
+                        <table border="1" style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                            </tr>
+                            ${ordersList}
+                        </table>
+                        <p>Copy any Order ID above to test status updates.</p>
+                    </div>
+                `;
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function testDirectUpdate() {
+            const orderId = document.getElementById('orderId').value;
+            const newStatus = document.getElementById('newStatus').value;
+            const resultDiv = document.getElementById('result');
+            
+            if (!orderId) {
+                resultDiv.innerHTML = '<div class="result error">Please enter an order ID</div>';
+                return;
+            }
+            
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                
+                if (!session) {
+                    resultDiv.innerHTML = '<div class="result error">Please sign in first.</div>';
+                    return;
+                }
+                
+                resultDiv.innerHTML = '<div class="result info">Testing database update...</div>';
+                
+                // First check if order exists and belongs to user
+                const { data: existingOrder, error: queryError } = await supabase
+                    .from('orders')
+                    .select('id, status, user_id')
+                    .eq('id', orderId)
+                    .single();
+                
+                if (queryError) {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <h3>Order Query Failed</h3>
+                            <p><strong>Error:</strong> ${queryError.message}</p>
+                            <p><strong>Code:</strong> ${queryError.code}</p>
+                            <p>This might be due to RLS policy or invalid order ID.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                if (existingOrder.user_id !== session.user.id) {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <h3>Permission Denied</h3>
+                            <p>Order belongs to a different user.</p>
+                            <p><strong>Order User ID:</strong> ${existingOrder.user_id}</p>
+                            <p><strong>Current User ID:</strong> ${session.user.id}</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Now try to update
+                const { data: updateResult, error: updateError } = await supabase
+                    .from('orders')
+                    .update({ status: newStatus })
+                    .eq('id', orderId)
+                    .select();
+                
+                if (updateError) {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <h3>Update Failed</h3>
+                            <p><strong>Error:</strong> ${updateError.message}</p>
+                            <p><strong>Code:</strong> ${updateError.code}</p>
+                            <p><strong>Order ID:</strong> ${orderId}</p>
+                            <p><strong>Attempted Status:</strong> ${newStatus}</p>
+                            <p>RLS policy is likely blocking this update.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                resultDiv.innerHTML = `
+                    <div class="result success">
+                        <h3>Update Successful! 🎉</h3>
+                        <p><strong>Order ID:</strong> ${orderId}</p>
+                        <p><strong>Old Status:</strong> ${existingOrder.status}</p>
+                        <p><strong>New Status:</strong> ${newStatus}</p>
+                        <p><strong>Rows Updated:</strong> ${updateResult.length}</p>
+                        <details>
+                            <summary>Update Result</summary>
+                            <pre>${JSON.stringify(updateResult, null, 2)}</pre>
+                        </details>
+                        <p><strong>✅ The RLS policy is working correctly!</strong></p>
+                    </div>
+                `;
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">Network Error: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

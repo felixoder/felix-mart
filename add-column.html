@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Payment Status Column</title>
+</head>
+<body>
+    <h1>Database Migration Script</h1>
+    <button onclick="addPaymentStatusColumn()">Add Payment Status Column</button>
+    <div id="result"></div>
+
+    <script>
+        async function addPaymentStatusColumn() {
+            const result = document.getElementById('result');
+            result.innerHTML = 'Adding column...';
+            
+            try {
+                // Add payment_status column
+                const response = await fetch('https://kwsqhrqhtcuacfvmxwji.supabase.co/rest/v1/rpc/exec_sql', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3c3FocnFodGN1YWNmdm14d2ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM1NDEyNTgsImV4cCI6MjA2OTExNzI1OH0.w677z2scEUSeLvsVqA3pPBUx0TihKB3LP1QuedLgqvQ',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3c3FocnFodGN1YWNmdm14d2ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM1NDEyNTgsImV4cCI6MjA2OTExNzI1OH0.w677z2scEUSeLvsVqA3pPBUx0TihKB3LP1QuedLgqvQ',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        sql: "ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment_status TEXT DEFAULT 'pending'"
+                    })
+                });
+                
+                if (response.ok) {
+                    result.innerHTML = 'Payment status column added successfully!';
+                } else {
+                    result.innerHTML = 'Error: ' + response.statusText;
+                }
+            } catch (error) {
+                result.innerHTML = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

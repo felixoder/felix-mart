@@ -195,6 +195,52 @@ Use these test card numbers in sandbox mode:
 - Expiry: Any future date
 - CVV: Any 3 digits
 
+## Testing Payment Cancellation
+
+### 1. Testing Cancelled Payments
+
+The application now properly handles payment cancellations. You can test this in several ways:
+
+**Method 1: URL Parameters**
+```
+http://localhost:5173/order-success?order_id=YOUR_ORDER_ID&payment_session_id=SESSION_ID&status=CANCELLED
+```
+
+**Method 2: Cashfree Sandbox Cancellation**
+- During payment in sandbox mode, close the payment window or click "Cancel"
+- The application will redirect to order-success with cancellation status
+
+### 2. Payment Status Handling
+
+The application now differentiates between:
+- ✅ **Success**: Payment completed successfully
+- ❌ **Failed**: Payment failed due to technical issues
+- 🚫 **Cancelled**: User cancelled the payment process
+
+### 3. Order Status Updates
+
+Based on payment result:
+- **Success** → Order status: `paid`
+- **Failed** → Order status: `failed`  
+- **Cancelled** → Order status: `cancelled`
+
+### 4. User Experience
+
+**Successful Payment:**
+- Green checkmark icon
+- "Payment Successful!" message
+- Options: "View All Orders" | "Continue Shopping"
+
+**Cancelled Payment:**
+- Orange X icon
+- "Payment Cancelled" message
+- Options: "Continue Shopping" | "Try Payment Again"
+
+**Failed Payment:**
+- Red X icon
+- "Payment Failed" message
+- Options: "View All Orders" | "Try Payment Again"
+
 ## Database Schema
 
 ### Key Tables

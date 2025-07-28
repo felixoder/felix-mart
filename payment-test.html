@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Verification Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .form-group { margin: 20px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 12px 24px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .result { margin-top: 20px; padding: 15px; border-radius: 4px; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Payment Verification Test</h1>
+        <p>Use this tool to test the payment verification endpoint with real Cashfree order IDs.</p>
+        
+        <form id="verificationForm">
+            <div class="form-group">
+                <label for="orderId">Order ID:</label>
+                <input type="text" id="orderId" placeholder="Enter Cashfree order ID" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="sessionId">Payment Session ID:</label>
+                <input type="text" id="sessionId" placeholder="Enter payment session ID (optional)">
+            </div>
+            
+            <button type="submit">Verify Payment</button>
+            <button type="button" onclick="testMockPayment()">Test with Mock Data</button>
+        </form>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('verificationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const orderId = document.getElementById('orderId').value;
+            const sessionId = document.getElementById('sessionId').value;
+            
+            await verifyPayment(orderId, sessionId, false);
+        });
+        
+        async function testMockPayment() {
+            await verifyPayment('test_order_123', 'test_session_123', true);
+        }
+        
+        async function verifyPayment(orderId, sessionId, useMock = false) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Verifying payment...</p>';
+            
+            try {
+                const endpoint = useMock ? '/debug/verify-payment' : '/functions/v1/verify-payment';
+                const response = await fetch(`http://localhost:3001${endpoint}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        order_id: orderId,
+                        payment_session_id: sessionId
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const isPaid = data.order_status === 'PAID' || data.payment_status === 'SUCCESS';
+                    
+                    resultDiv.innerHTML = `
+                        <div class="result ${isPaid ? 'success' : 'error'}">
+                            <h3>Payment Status: ${isPaid ? 'PAID' : 'NOT PAID'}</h3>
+                            <p><strong>Order Status:</strong> ${data.order_status || 'Unknown'}</p>
+                            <p><strong>Payment Status:</strong> ${data.payment_status || 'Unknown'}</p>
+                            <p><strong>Order ID:</strong> ${data.order_id || 'Unknown'}</p>
+                            <details>
+                                <summary>Full Response</summary>
+                                <pre>${JSON.stringify(data, null, 2)}</pre>
+                            </details>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <h3>Verification Failed</h3>
+                            <p>${data.error || 'Unknown error'}</p>
+                            <details>
+                                <summary>Full Response</summary>
+                                <pre>${JSON.stringify(data, null, 2)}</pre>
+                            </details>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>Network Error</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

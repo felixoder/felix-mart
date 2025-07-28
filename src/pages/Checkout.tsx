@@ -13,6 +13,8 @@ const Checkout = () => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [cartItems, setCartItems] = useState<any[]>([]);
+  const [subtotal, setSubtotal] = useState(0);
+  const [deliveryCharge] = useState(70); // Fixed delivery charge of ₹70
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -21,7 +23,7 @@ const Checkout = () => {
   useEffect(() => {
     const initializeCashfree = async () => {
       const cashfreeInstance = await load({
-        mode: "production", // Using production mode for real payments
+        mode: "sandbox", // Using sandbox mode for testing
       });
       setCashfree(cashfreeInstance);
     };
@@ -59,8 +61,9 @@ const Checkout = () => {
 
       const items = data.map(item => ({ ...item.products, quantity: item.quantity }));
       setCartItems(items);
-      const cartTotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-      setTotal(cartTotal);
+      const cartSubtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      setSubtotal(cartSubtotal);
+      setTotal(cartSubtotal + deliveryCharge);
     } catch (error) {
       toast({
         title: "Error",
@@ -99,6 +102,28 @@ const Checkout = () => {
     }
 
     try {
+      // Validate stock availability before placing order
+      for (const item of cartItems) {
+        const { data: currentProduct, error: stockError } = await supabase
+          .from("products")
+          .select("stock_quantity, name")
+          .eq("id", item.id)
+          .single();
+
+        if (stockError) {
+          throw new Error(`Failed to check stock for ${item.name}`);
+        }
+
+        if (currentProduct.stock_quantity < item.quantity) {
+          toast({
+            title: "Insufficient Stock",
+            description: `Sorry, only ${currentProduct.stock_quantity} units of ${currentProduct.name} are available. Please update your cart.`,
+            variant: "destructive",
+          });
+          return;
+        }
+      }
+
       // Create order in database first
       const shippingAddress = {
         name,
@@ -134,6 +159,38 @@ const Checkout = () => {
         .insert(orderItems);
 
       if (itemsError) throw itemsError;
+
+      // Update stock quantities for each product
+      for (const item of cartItems) {
+        const { data: currentProduct, error: fetchError } = await supabase
+          .from("products")
+          .select("stock_quantity")
+          .eq("id", item.id)
+          .single();
+
+        if (fetchError) {
+          console.error("Error fetching product stock:", fetchError);
+          continue;
+        }
+
+        const newStockQuantity = Math.max(0, currentProduct.stock_quantity - item.quantity);
+        
+        const { error: updateError } = await supabase
+          .from("products")
+          .update({ stock_quantity: newStockQuantity })
+          .eq("id", item.id);
+
+        if (updateError) {
+          console.error("Error updating product stock:", updateError);
+          toast({
+            title: "Warning",
+            description: `Failed to update stock for ${item.name}`,
+            variant: "destructive",
+          });
+        } else {
+          console.log(`Stock updated for ${item.name}: ${currentProduct.stock_quantity} -> ${newStockQuantity}`);
+        }
+      }
 
       // Create payment session with Cashfree
       // Use local server for development, Supabase functions for production
@@ -187,6 +244,14 @@ const Checkout = () => {
         const checkoutOptions = {
           paymentSessionId: data.payment_session_id,
           returnUrl: `${window.location.origin}/order-success?order_id=${order.id}&payment_session_id=${data.payment_session_id}`,
+          onCancel: () => {
+            // Handle cancellation
+            window.location.href = `/order-success?order_id=${order.id}&payment_session_id=${data.payment_session_id}&status=CANCELLED`;
+          },
+          onError: (error: any) => {
+            console.error('Payment error:', error);
+            window.location.href = `/order-success?order_id=${order.id}&payment_session_id=${data.payment_session_id}&status=FAILED`;
+          }
         };
         
         cashfree.checkout(checkoutOptions);
@@ -259,8 +324,16 @@ const Checkout = () => {
                         <p>₹{(item.price * item.quantity).toFixed(2)}</p>
                       </div>
                     ))}
-                    <div className="border-t pt-4 mt-4">
-                      <div className="flex justify-between font-bold text-lg">
+                    <div className="border-t pt-4 mt-4 space-y-2">
+                      <div className="flex justify-between">
+                        <p>Subtotal</p>
+                        <p>₹{subtotal.toFixed(2)}</p>
+                      </div>
+                      <div className="flex justify-between">
+                        <p>Delivery Charge</p>
+                        <p>₹{deliveryCharge.toFixed(2)}</p>
+                      </div>
+                      <div className="flex justify-between font-bold text-lg border-t pt-2">
                         <p>Total</p>
                         <p>₹{total.toFixed(2)}</p>
                       </div>

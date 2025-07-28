@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Status Update Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .form-group { margin: 20px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 12px 24px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+        .result { margin-top: 20px; padding: 15px; border-radius: 4px; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .info { background: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; white-space: pre-wrap; }
+        .test-section { border: 1px solid #ddd; padding: 20px; margin: 20px 0; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Order Status Update Test</h1>
+        <p>This tool helps test the complete flow of payment verification and order status update.</p>
+        
+        <div class="test-section">
+            <h2>Test 1: Direct Database Order Status Update</h2>
+            <p>Test if we can directly update an order status in the database.</p>
+            
+            <div class="form-group">
+                <label for="testOrderId">Order ID:</label>
+                <input type="text" id="testOrderId" placeholder="Enter an existing order ID">
+            </div>
+            
+            <div class="form-group">
+                <label for="newStatus">New Status:</label>
+                <select id="newStatus">
+                    <option value="pending">Pending</option>
+                    <option value="paid">Paid</option>
+                    <option value="failed">Failed</option>
+                    <option value="delivered">Delivered</option>
+                </select>
+            </div>
+            
+            <button onclick="testDirectUpdate()">Test Direct Update</button>
+            <button onclick="fetchOrderStatus()">Check Current Status</button>
+            
+            <div id="directUpdateResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Test 2: Payment Verification Flow</h2>
+            <p>Test the complete payment verification and order update flow.</p>
+            
+            <div class="form-group">
+                <label for="paymentOrderId">Order ID:</label>
+                <input type="text" id="paymentOrderId" placeholder="Enter order ID">
+            </div>
+            
+            <div class="form-group">
+                <label for="paymentSessionId">Payment Session ID:</label>
+                <input type="text" id="paymentSessionId" placeholder="Enter payment session ID">
+            </div>
+            
+            <button onclick="testPaymentVerification()">Test Real Payment Verification</button>
+            <button onclick="testMockPaymentVerification()">Test Mock Payment Verification</button>
+            
+            <div id="paymentVerificationResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Test 3: OrderSuccess Page Simulation</h2>
+            <p>Test the complete OrderSuccess page flow.</p>
+            
+            <div class="form-group">
+                <label for="simulateOrderId">Order ID:</label>
+                <input type="text" id="simulateOrderId" placeholder="Enter order ID">
+            </div>
+            
+            <button onclick="openOrderSuccessPage()">Open OrderSuccess Page (Debug Mode)</button>
+            <button onclick="openOrderSuccessPageReal()">Open OrderSuccess Page (Real Mode)</button>
+            
+            <div id="simulationResult"></div>
+        </div>
+    </div>
+
+    <script>
+        // Test direct database update
+        async function testDirectUpdate() {
+            const orderId = document.getElementById('testOrderId').value;
+            const newStatus = document.getElementById('newStatus').value;
+            const resultDiv = document.getElementById('directUpdateResult');
+            
+            if (!orderId) {
+                resultDiv.innerHTML = '<div class="result error">Please enter an order ID</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">Testing direct database update...</div>';
+            
+            try {
+                // This would need to be implemented with Supabase client
+                resultDiv.innerHTML = `
+                    <div class="result info">
+                        <h4>Direct Update Test</h4>
+                        <p>This test requires Supabase client integration.</p>
+                        <p>Order ID: ${orderId}</p>
+                        <p>New Status: ${newStatus}</p>
+                        <p>To test this manually:</p>
+                        <ol>
+                            <li>Open browser console</li>
+                            <li>Go to your application</li>
+                            <li>Use Supabase client to update order status</li>
+                        </ol>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">Error: ${error.message}</div>`;
+            }
+        }
+        
+        // Fetch current order status
+        async function fetchOrderStatus() {
+            const orderId = document.getElementById('testOrderId').value;
+            const resultDiv = document.getElementById('directUpdateResult');
+            
+            if (!orderId) {
+                resultDiv.innerHTML = '<div class="result error">Please enter an order ID</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">This requires Supabase client integration to fetch order status.</div>';
+        }
+        
+        // Test payment verification
+        async function testPaymentVerification() {
+            const orderId = document.getElementById('paymentOrderId').value;
+            const sessionId = document.getElementById('paymentSessionId').value;
+            const resultDiv = document.getElementById('paymentVerificationResult');
+            
+            if (!orderId) {
+                resultDiv.innerHTML = '<div class="result error">Please enter an order ID</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">Testing payment verification...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3001/functions/v1/verify-payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        order_id: orderId,
+                        payment_session_id: sessionId
+                    })
+                });
+                
+                const data = await response.json();
+                
+                const isPaid = data.order_status === 'PAID' || data.payment_status === 'SUCCESS';
+                
+                resultDiv.innerHTML = `
+                    <div class="result ${response.ok ? (isPaid ? 'success' : 'info') : 'error'}">
+                        <h4>Payment Verification Result</h4>
+                        <p><strong>Status:</strong> ${response.ok ? 'Success' : 'Failed'}</p>
+                        <p><strong>Order Status:</strong> ${data.order_status || 'Unknown'}</p>
+                        <p><strong>Payment Status:</strong> ${data.payment_status || 'Unknown'}</p>
+                        <p><strong>Is Paid:</strong> ${isPaid ? 'YES' : 'NO'}</p>
+                        <details>
+                            <summary>Full Response</summary>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </details>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">Network Error: ${error.message}</div>`;
+            }
+        }
+        
+        // Test mock payment verification
+        async function testMockPaymentVerification() {
+            const orderId = document.getElementById('paymentOrderId').value || 'test_order_123';
+            const sessionId = document.getElementById('paymentSessionId').value || 'test_session_123';
+            const resultDiv = document.getElementById('paymentVerificationResult');
+            
+            resultDiv.innerHTML = '<div class="result info">Testing mock payment verification...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3001/debug/verify-payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        order_id: orderId,
+                        payment_session_id: sessionId
+                    })
+                });
+                
+                const data = await response.json();
+                
+                const isPaid = data.order_status === 'PAID' || data.payment_status === 'SUCCESS';
+                
+                resultDiv.innerHTML = `
+                    <div class="result ${isPaid ? 'success' : 'error'}">
+                        <h4>Mock Payment Verification Result</h4>
+                        <p><strong>Order Status:</strong> ${data.order_status}</p>
+                        <p><strong>Payment Status:</strong> ${data.payment_status}</p>
+                        <p><strong>Is Paid:</strong> ${isPaid ? 'YES' : 'NO'}</p>
+                        <p><strong>This mock should always return PAID status for testing.</strong></p>
+                        <details>
+                            <summary>Full Response</summary>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </details>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">Network Error: ${error.message}</div>`;
+            }
+        }
+        
+        // Open OrderSuccess page in debug mode
+        function openOrderSuccessPage() {
+            const orderId = document.getElementById('simulateOrderId').value;
+            if (!orderId) {
+                document.getElementById('simulationResult').innerHTML = '<div class="result error">Please enter an order ID</div>';
+                return;
+            }
+            
+            const url = `http://localhost:5176/order-success?order_id=${orderId}&payment_session_id=test_session&debug=true`;
+            window.open(url, '_blank');
+            
+            document.getElementById('simulationResult').innerHTML = `
+                <div class="result info">
+                    <h4>OrderSuccess Page Opened (Debug Mode)</h4>
+                    <p>URL: ${url}</p>
+                    <p>This will use mock payment verification data that should always return PAID status.</p>
+                    <p>Check the browser console for detailed logs.</p>
+                </div>
+            `;
+        }
+        
+        // Open OrderSuccess page in real mode
+        function openOrderSuccessPageReal() {
+            const orderId = document.getElementById('simulateOrderId').value;
+            if (!orderId) {
+                document.getElementById('simulationResult').innerHTML = '<div class="result error">Please enter an order ID</div>';
+                return;
+            }
+            
+            const url = `http://localhost:5176/order-success?order_id=${orderId}&payment_session_id=test_session`;
+            window.open(url, '_blank');
+            
+            document.getElementById('simulationResult').innerHTML = `
+                <div class="result info">
+                    <h4>OrderSuccess Page Opened (Real Mode)</h4>
+                    <p>URL: ${url}</p>
+                    <p>This will use real Cashfree payment verification.</p>
+                    <p>Check the browser console for detailed logs.</p>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

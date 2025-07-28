@@ -62,7 +62,12 @@ const Products = () => {
         .single();
 
       if (!profile?.is_admin) {
-        window.location.href = "/notfound";
+        toast({
+          title: "Access Denied",
+          description: "You don't have permission to access this page",
+          variant: "destructive",
+        });
+        window.location.href = "/";
         return;
       }
 

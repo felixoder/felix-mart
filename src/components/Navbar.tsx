@@ -67,6 +67,8 @@ export const Navbar = ({ user, cartItemsCount, onCartClick }: NavbarProps) => {
         title: "Success",
         description: "Signed out successfully",
       });
+      // Reload the window after successful sign out
+      window.location.reload();
     }
   };
 
@@ -80,14 +82,16 @@ export const Navbar = ({ user, cartItemsCount, onCartClick }: NavbarProps) => {
       >
         Home
       </a>
-      <a
-        href="/products"
-        className={`${
-          mobile ? "block py-2" : "inline-flex"
-        } text-white hover:text-white/80 transition-colors`}
-      >
-        Products
-      </a>
+      {isAdmin && (
+        <a
+          href="/products"
+          className={`${
+            mobile ? "block py-2" : "inline-flex"
+          } text-white hover:text-white/80 transition-colors`}
+        >
+          Products
+        </a>
+      )}
       {user && (
         <a
           href="/orders"
