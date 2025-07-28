@@ -139,107 +139,107 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
       <Navbar
         user={user}
         cartItemsCount={cartItemsCount}
         onCartClick={() => {}}
       />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-12">
-          <div className="bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <MessageCircle className="h-10 w-10 text-primary" />
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center mb-16">
+          <div className="bg-gradient-to-br from-purple-100 to-pink-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg">
+            <MessageCircle className="h-12 w-12 text-purple-600" />
           </div>
-          <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            We're here to help! Get in touch with us for any questions, concerns, or feedback about your shopping experience.
+          <h1 className="text-5xl font-bold mb-6 text-purple-600">💬 Contact Us</h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            🤗 We're here to help! Get in touch with us for any questions about our amazing baby toys or your shopping experience!
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Contact Information */}
-          <div className="lg:col-span-1 space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <Phone className="h-6 w-6 text-primary" />
-                  Call Us
+          <div className="lg:col-span-1 space-y-8">
+            <Card className="border-2 border-purple-100 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+              <CardHeader className="bg-gradient-to-br from-purple-50 to-pink-50">
+                <CardTitle className="flex items-center gap-3 text-purple-600">
+                  <Phone className="h-6 w-6" />
+                  📞 Call Us
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-2xl font-bold mb-2">+91 98765 43210</p>
-                <p className="text-muted-foreground mb-4">
-                  Speak directly with our customer support team
+              <CardContent className="pt-6">
+                <p className="text-2xl font-bold mb-3 text-purple-700">+91 9609384607</p>
+                <p className="text-gray-600 mb-6">
+                  🗣️ Speak directly with our friendly customer support team
                 </p>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2 text-sm text-gray-500">
                   <Clock className="h-4 w-4" />
-                  <span>Mon-Sat: 9:00 AM - 6:00 PM IST</span>
+                  <span>⏰ Mon-Sat: 9:00 AM - 6:00 PM IST</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <Mail className="h-6 w-6 text-primary" />
-                  Email Us
+            <Card className="border-2 border-pink-100 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+              <CardHeader className="bg-gradient-to-br from-pink-50 to-purple-50">
+                <CardTitle className="flex items-center gap-3 text-pink-600">
+                  <Mail className="h-6 w-6" />
+                  💌 Email Us
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-lg font-semibold mb-2">support@felixmart.com</p>
-                <p className="text-muted-foreground mb-4">
-                  Send us your queries and we'll respond within 24 hours
+              <CardContent className="pt-6">
+                <p className="text-lg font-semibold mb-3 text-pink-700">debayanghosh408@gmail.com</p>
+                <p className="text-gray-600 mb-6">
+                  📧 Send us your queries and we'll respond within 24 hours
                 </p>
-                <div className="space-y-2 text-sm text-muted-foreground">
-                  <p>• Order inquiries & tracking</p>
-                  <p>• Product information</p>
-                  <p>• Technical support</p>
-                  <p>• General questions</p>
+                <div className="space-y-2 text-sm text-gray-500">
+                  <p>• 📦 Order inquiries & tracking</p>
+                  <p>• 🧸 Product information</p>
+                  <p>• 🛠️ Technical support</p>
+                  <p>• ❓ General questions</p>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <MapPin className="h-6 w-6 text-primary" />
-                  Visit Us
+            <Card className="border-2 border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+              <CardHeader className="bg-gradient-to-br from-blue-50 to-cyan-50">
+                <CardTitle className="flex items-center gap-3 text-blue-600">
+                  <MapPin className="h-6 w-6" />
+                  📍 Visit Us
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-1 mb-4">
-                  <p className="font-semibold">felixmart</p>
-                  <p>Debayan Ghosh</p>
-                  <p>Sutragarh, Lankapara</p>
-                  <p>Santipur, Nadia</p>
-                  <p>West Bengal - 741404</p>
-                  <p>India</p>
+              <CardContent className="pt-6">
+                <div className="space-y-1 mb-6">
+                  <p className="font-bold text-blue-700">🎈 felixmart</p>
+                  <p className="text-gray-600">Debayan Ghosh</p>
+                  <p className="text-gray-600">Sutragarh, Lankapara</p>
+                  <p className="text-gray-600">Santipur, Nadia</p>
+                  <p className="text-gray-600">West Bengal - 741404</p>
+                  <p className="text-gray-600">🇮🇳 India</p>
                 </div>
-                <p className="text-muted-foreground text-sm">
-                  Visit our location for in-person assistance and product viewing
+                <p className="text-gray-500 text-sm">
+                  🏪 Visit our location for in-person assistance and product viewing
                 </p>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Follow Us</CardTitle>
+            <Card className="border-2 border-orange-100 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+              <CardHeader className="bg-gradient-to-br from-orange-50 to-yellow-50">
+                <CardTitle className="text-orange-600">🌟 Follow Us</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-6">
                 <div className="flex space-x-4">
-                  <a href="#" className="bg-blue-100 p-3 rounded-full hover:bg-blue-200 transition-colors">
-                    <Facebook className="h-5 w-5 text-blue-600" />
+                  <a href="#" className="bg-purple-100 p-3 rounded-full hover:bg-purple-200 transition-all duration-300 transform hover:scale-110 shadow-md">
+                    <Facebook className="h-5 w-5 text-purple-600" />
                   </a>
-                  <a href="#" className="bg-blue-100 p-3 rounded-full hover:bg-blue-200 transition-colors">
-                    <Twitter className="h-5 w-5 text-blue-600" />
+                  <a href="#" className="bg-pink-100 p-3 rounded-full hover:bg-pink-200 transition-all duration-300 transform hover:scale-110 shadow-md">
+                    <Twitter className="h-5 w-5 text-pink-600" />
                   </a>
-                  <a href="#" className="bg-pink-100 p-3 rounded-full hover:bg-pink-200 transition-colors">
-                    <Instagram className="h-5 w-5 text-pink-600" />
+                  <a href="#" className="bg-orange-100 p-3 rounded-full hover:bg-orange-200 transition-all duration-300 transform hover:scale-110 shadow-md">
+                    <Instagram className="h-5 w-5 text-orange-600" />
                   </a>
                 </div>
-                <p className="text-muted-foreground text-sm mt-3">
-                  Stay updated with our latest products and offers
+                <p className="text-gray-500 text-sm mt-4">
+                  📱 Stay updated with our latest toys and special offers!
                 </p>
               </CardContent>
             </Card>
@@ -247,22 +247,22 @@ const Contact = () => {
 
           {/* Contact Form */}
           <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <Send className="h-6 w-6 text-primary" />
-                  Send us a Message
+            <Card className="border-2 border-purple-100 shadow-xl">
+              <CardHeader className="bg-gradient-to-br from-purple-50 to-pink-50">
+                <CardTitle className="flex items-center gap-3 text-purple-600">
+                  <Send className="h-6 w-6" />
+                  💌 Send us a Message
                 </CardTitle>
-                <p className="text-muted-foreground">
-                  Fill out the form below and we'll get back to you as soon as possible.
+                <p className="text-gray-600">
+                  📝 Fill out the form below and we'll get back to you as soon as possible!
                 </p>
               </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <CardContent className="pt-8">
+                <form onSubmit={handleSubmit} className="space-y-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label htmlFor="name" className="block text-sm font-medium mb-2">
-                        Full Name *
+                      <label htmlFor="name" className="block text-sm font-semibold mb-3 text-purple-600">
+                        👤 Full Name *
                       </label>
                       <Input
                         id="name"
@@ -271,12 +271,13 @@ const Contact = () => {
                         value={formData.name}
                         onChange={handleInputChange}
                         placeholder="Enter your full name"
+                        className="border-purple-200 focus:border-purple-400 focus:ring-purple-200"
                         required
                       />
                     </div>
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium mb-2">
-                        Email Address *
+                      <label htmlFor="email" className="block text-sm font-semibold mb-3 text-purple-600">
+                        📧 Email Address *
                       </label>
                       <Input
                         id="email"
@@ -285,14 +286,15 @@ const Contact = () => {
                         value={formData.email}
                         onChange={handleInputChange}
                         placeholder="Enter your email address"
+                        className="border-purple-200 focus:border-purple-400 focus:ring-purple-200"
                         required
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="subject" className="block text-sm font-medium mb-2">
-                      Subject *
+                    <label htmlFor="subject" className="block text-sm font-semibold mb-3 text-purple-600">
+                      📋 Subject *
                     </label>
                     <Input
                       id="subject"
@@ -301,13 +303,14 @@ const Contact = () => {
                       value={formData.subject}
                       onChange={handleInputChange}
                       placeholder="What is this regarding?"
+                      className="border-purple-200 focus:border-purple-400 focus:ring-purple-200"
                       required
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="message" className="block text-sm font-medium mb-2">
-                      Message *
+                    <label htmlFor="message" className="block text-sm font-semibold mb-3 text-purple-600">
+                      💬 Message *
                     </label>
                     <Textarea
                       id="message"
@@ -316,24 +319,25 @@ const Contact = () => {
                       onChange={handleInputChange}
                       placeholder="Please describe your inquiry in detail..."
                       rows={6}
+                      className="border-purple-200 focus:border-purple-400 focus:ring-purple-200"
                       required
                     />
                   </div>
 
                   <Button 
                     type="submit" 
-                    className="w-full" 
+                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 text-lg shadow-lg transform hover:scale-105 transition-all duration-300" 
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (
                       <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
                         Sending...
                       </>
                     ) : (
                       <>
-                        <Send className="h-4 w-4 mr-2" />
-                        Send Message
+                        <Send className="h-5 w-5 mr-3" />
+                        🚀 Send Message
                       </>
                     )}
                   </Button>
@@ -342,60 +346,60 @@ const Contact = () => {
             </Card>
 
             {/* Quick Help Section */}
-            <div className="mt-8">
-              <h3 className="text-xl font-bold mb-4">Quick Help</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Card className="p-4">
-                  <div className="flex items-start gap-3">
-                    <div className="bg-blue-100 p-2 rounded-lg">
-                      <Package className="h-5 w-5 text-blue-600" />
+            <div className="mt-12">
+              <h3 className="text-2xl font-bold mb-8 text-purple-600">🆘 Quick Help</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card className="p-6 border-2 border-purple-100 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-gradient-to-br from-purple-100 to-purple-200 p-3 rounded-xl shadow-md">
+                      <Package className="h-6 w-6 text-purple-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-1">Order Tracking</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Check your order status in the "My Orders" section of your account.
+                      <h4 className="font-bold mb-2 text-purple-600">📦 Order Tracking</h4>
+                      <p className="text-sm text-gray-600">
+                        Check your toy order status in the "My Orders" section of your account.
                       </p>
                     </div>
                   </div>
                 </Card>
 
-                <Card className="p-4">
-                  <div className="flex items-start gap-3">
-                    <div className="bg-green-100 p-2 rounded-lg">
-                      <Headphones className="h-5 w-5 text-green-600" />
+                <Card className="p-6 border-2 border-pink-100 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-gradient-to-br from-pink-100 to-pink-200 p-3 rounded-xl shadow-md">
+                      <Headphones className="h-6 w-6 text-pink-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-1">Live Support</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Call us during business hours for immediate assistance.
+                      <h4 className="font-bold mb-2 text-pink-600">🎧 Live Support</h4>
+                      <p className="text-sm text-gray-600">
+                        Call us during business hours for immediate assistance with your baby toy needs.
                       </p>
                     </div>
                   </div>
                 </Card>
 
-                <Card className="p-4">
-                  <div className="flex items-start gap-3">
-                    <div className="bg-purple-100 p-2 rounded-lg">
-                      <MessageCircle className="h-5 w-5 text-purple-600" />
+                <Card className="p-6 border-2 border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-gradient-to-br from-blue-100 to-blue-200 p-3 rounded-xl shadow-md">
+                      <MessageCircle className="h-6 w-6 text-blue-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-1">FAQ</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Find answers to common questions on our homepage FAQ section.
+                      <h4 className="font-bold mb-2 text-blue-600">❓ FAQ</h4>
+                      <p className="text-sm text-gray-600">
+                        Find answers to common questions about baby toys on our homepage FAQ section.
                       </p>
                     </div>
                   </div>
                 </Card>
 
-                <Card className="p-4">
-                  <div className="flex items-start gap-3">
-                    <div className="bg-orange-100 p-2 rounded-lg">
-                      <Mail className="h-5 w-5 text-orange-600" />
+                <Card className="p-6 border-2 border-orange-100 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-gradient-to-br from-orange-100 to-orange-200 p-3 rounded-xl shadow-md">
+                      <Mail className="h-6 w-6 text-orange-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-1">Email Response</h4>
-                      <p className="text-sm text-muted-foreground">
-                        We typically respond to emails within 24 hours.
+                      <h4 className="font-bold mb-2 text-orange-600">⚡ Email Response</h4>
+                      <p className="text-sm text-gray-600">
+                        We typically respond to emails within 24 hours with helpful toy information.
                       </p>
                     </div>
                   </div>

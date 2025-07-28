@@ -116,13 +116,15 @@ export const Navbar = ({ user, cartItemsCount, onCartClick }: NavbarProps) => {
   );
 
   return (
-    <nav className="bg-gradient-to-r from-primary to-primary/90 shadow-[var(--shadow-elegant)] sticky top-0 z-50 backdrop-blur-lg">
+    <nav className="bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600 shadow-xl sticky top-0 z-50 backdrop-blur-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <Store className="h-8 w-8 text-white glow" />
-            <span className="text-xl font-bold text-white">FelixMart</span>
+            <div className="bg-white/20 p-1 rounded-full">
+              <Store className="h-6 w-6 text-white" />
+            </div>
+            <span className="text-xl font-bold text-white">🎈 FelixMart</span>
           </div>
 
           {/* Desktop Navigation */}
@@ -136,11 +138,11 @@ export const Navbar = ({ user, cartItemsCount, onCartClick }: NavbarProps) => {
               variant="ghost"
               size="icon"
               onClick={onCartClick}
-              className="relative text-white hover:bg-white/20"
+              className="relative text-white hover:bg-white/20 transform hover:scale-110 transition-all duration-300"
             >
               <ShoppingCart className="h-5 w-5" />
               {cartItemsCount > 0 && (
-                <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center text-xs bg-destructive text-destructive-foreground">
+                <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center text-xs bg-yellow-400 text-purple-700 font-bold animate-bounce shadow-lg">
                   {cartItemsCount}
                 </Badge>
               )}

@@ -233,7 +233,7 @@ const Products = () => {
         onCartClick={() => setIsCartOpen(true)} 
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="full-width-container px-4 sm:px-6 lg:px-8 xl:px-12 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Products</h1>
           <p className="text-muted-foreground">Manage your store products</p>
@@ -282,7 +282,7 @@ const Products = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="product-grid">
             {filteredProducts.map((product) => (
               <ProductCard
                 key={product.id}

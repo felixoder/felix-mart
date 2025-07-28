@@ -149,3 +149,52 @@ All colors MUST be HSL.
     filter: drop-shadow(var(--shadow-glow));
   }
 }
+
+/* Product grid utilities */
+.product-grid {
+  @apply grid gap-8;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-auto-rows: 1fr;
+  align-items: start;
+}
+
+.product-card {
+  @apply h-full w-full min-w-0;
+  contain: layout style paint;
+  isolation: isolate;
+}
+
+/* Ensure full width containers */
+.full-width-container {
+  width: 100%;
+  max-width: none;
+}
+
+/* Improved responsive breakpoints */
+@media (max-width: 640px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 6rem 1rem;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 1025px) {
+  .product-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+}

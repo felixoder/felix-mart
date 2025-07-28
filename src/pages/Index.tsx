@@ -206,60 +206,70 @@ const Index = () => {
       />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary via-primary/90 to-primary/80 text-white">
-        <div className="absolute inset-0 bg-black/20"></div>
+      <section className="relative bg-gradient-to-br from-pink-400 via-purple-400 to-blue-400 text-white overflow-hidden">
+        {/* Floating toy decorations */}
+        <div className="absolute inset-0">
+          <div className="absolute top-10 left-10 w-8 h-8 bg-yellow-300 rounded-full animate-bounce"></div>
+          <div className="absolute top-20 right-20 w-6 h-6 bg-red-400 rounded-full animate-bounce delay-300"></div>
+          <div className="absolute bottom-20 left-20 w-10 h-10 bg-green-400 rounded-full animate-bounce delay-500"></div>
+          <div className="absolute bottom-10 right-10 w-4 h-4 bg-orange-400 rounded-full animate-bounce delay-700"></div>
+          <div className="absolute top-1/2 left-5 w-5 h-5 bg-cyan-300 rounded-full animate-bounce delay-1000"></div>
+          <div className="absolute top-1/3 right-5 w-7 h-7 bg-pink-300 rounded-full animate-bounce delay-200"></div>
+        </div>
+        
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <div className="space-y-4">
-                <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-                  Welcome to{" "}
-                  <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                <h1 className="text-4xl md:text-6xl font-bold leading-tight font-rounded">
+                  🎈 Welcome to{" "}
+                  <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent drop-shadow-lg">
                     felixmart Premium Store
                   </span>
+                  {" "}🧸
                 </h1>
-                <p className="text-lg md:text-xl text-white/90 max-w-lg">
-                  Discover premium handcrafted products, carefully curated for the modern lifestyle. 
-                  Quality meets elegance in every piece.
+                <p className="text-lg md:text-xl text-white/95 max-w-lg leading-relaxed">
+                  🌟 Discover magical baby toys that spark joy, creativity, and endless fun! 
+                  Safe, colorful, and designed to make every little one smile! 🎨✨
                 </p>
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-semibold">
+                <Button size="lg" className="bg-gradient-to-r from-yellow-400 to-orange-400 text-purple-800 hover:from-yellow-500 hover:to-orange-500 font-bold text-lg shadow-lg transform hover:scale-105 transition-all duration-300 rounded-full border-2 border-white/20">
                   <ShoppingBag className="mr-2 h-5 w-5" />
-                  Shop Now
+                  🎁 Shop Toys Now
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-black bg-white hover:bg-white/90 hover:text-black font-semibold">
-                  Learn More
+                <Button size="lg" variant="outline" className="border-2 border-white text-white bg-white/10 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white hover:border-transparent font-bold text-lg rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 backdrop-blur-sm">
+                  🤔 Learn More
                 </Button>
               </div>
 
               <div className="flex items-center gap-8 pt-4">
                 <div className="flex items-center gap-2">
-                  <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                  <span className="font-medium">4.9/5 Rating</span>
+                  <Star className="h-5 w-5 text-yellow-300 fill-current animate-pulse" />
+                  <span className="font-bold">4.9/5 ⭐ Happy Parents!</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Users className="h-5 w-5" />
-                  <span className="font-medium">10K+ Happy Customers</span>
+                  <Users className="h-5 w-5 animate-pulse" />
+                  <span className="font-bold">10K+ 👶 Happy Babies</span>
                 </div>
               </div>
             </div>
 
             <div className="relative">
-              <div className="aspect-square bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20">
+              <div className="aspect-square bg-white/20 backdrop-blur-sm rounded-3xl p-8 border-4 border-white/30 shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
                 <div className="grid grid-cols-2 gap-4 h-full">
-                  <div className="bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-                    <Award className="h-12 w-12 text-yellow-300" />
+                  <div className="bg-gradient-to-br from-red-300 to-red-400 backdrop-blur-sm rounded-2xl flex items-center justify-center transform hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <div className="text-4xl animate-bounce">🚗</div>
                   </div>
-                  <div className="bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-                    <Shield className="h-12 w-12 text-green-300" />
+                  <div className="bg-gradient-to-br from-green-300 to-green-400 backdrop-blur-sm rounded-2xl flex items-center justify-center transform hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <div className="text-4xl animate-bounce delay-200">🧸</div>
                   </div>
-                  <div className="bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-                    <Truck className="h-12 w-12 text-blue-300" />
+                  <div className="bg-gradient-to-br from-blue-300 to-blue-400 backdrop-blur-sm rounded-2xl flex items-center justify-center transform hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <div className="text-4xl animate-bounce delay-300">🎲</div>
                   </div>
-                  <div className="bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-                    <Heart className="h-12 w-12 text-red-300" />
+                  <div className="bg-gradient-to-br from-yellow-300 to-yellow-400 backdrop-blur-sm rounded-2xl flex items-center justify-center transform hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <div className="text-4xl animate-bounce delay-500">🎨</div>
                   </div>
                 </div>
               </div>
@@ -268,82 +278,30 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-16 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Choose felixmart?</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              We're committed to providing exceptional quality and service that exceeds expectations
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <Card className="text-center p-6 hover:shadow-lg transition-shadow">
-              <CardContent className="pt-6">
-                <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Award className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="font-semibold text-lg mb-2">Premium Quality</h3>
-                <p className="text-muted-foreground">Handpicked products with superior craftsmanship and attention to detail</p>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center p-6 hover:shadow-lg transition-shadow">
-              <CardContent className="pt-6">
-                <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Truck className="h-8 w-8 text-green-600" />
-                </div>
-                <h3 className="font-semibold text-lg mb-2">Fast Delivery</h3>
-                <p className="text-muted-foreground">Quick and secure shipping with tracking across India</p>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center p-6 hover:shadow-lg transition-shadow">
-              <CardContent className="pt-6">
-                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Shield className="h-8 w-8 text-blue-600" />
-                </div>
-                <h3 className="font-semibold text-lg mb-2">Secure Payment</h3>
-                <p className="text-muted-foreground">Safe and encrypted transactions with multiple payment options</p>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center p-6 hover:shadow-lg transition-shadow">
-              <CardContent className="pt-6">
-                <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Clock className="h-8 w-8 text-purple-600" />
-                </div>
-                <h3 className="font-semibold text-lg mb-2">24/7 Support</h3>
-                <p className="text-muted-foreground">Round-the-clock customer service for all your needs</p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Products */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Featured Products - Moved before Features */}
+      <section className="py-16 bg-white">
+        <div className="full-width-container px-4 sm:px-6 lg:px-8 xl:px-12">
           <div className="flex items-center justify-between mb-12">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Featured Products</h2>
-              <p className="text-lg text-muted-foreground">Discover our most popular items</p>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-purple-600">
+                🎁 Our Most Loved Baby Toys! 
+              </h2>
+              <p className="text-lg text-gray-600">Discover the toys that make babies giggle with joy! 😄✨</p>
             </div>
-            <Button variant="outline" className="hidden md:flex">
-              View All <ArrowRight className="ml-2 h-4 w-4" />
+            <Button variant="outline" className="hidden md:flex border-2 border-purple-300 text-purple-600 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-300 rounded-full">
+              🔍 View All Toys <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
 
           {/* Search and Filters */}
           <div className="mb-8 space-y-4">
             <div className="relative max-w-md">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-3 h-4 w-4 text-purple-400" />
               <Input
-                placeholder="Search products..."
+                placeholder="🔍 Search for amazing toys..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 border-purple-200 focus:border-purple-400 focus:ring-purple-200"
               />
             </div>
             
@@ -352,8 +310,12 @@ const Index = () => {
                 variant={selectedCategory === "all" ? "default" : "outline"}
                 onClick={() => setSelectedCategory("all")}
                 size="sm"
+                className={selectedCategory === "all" 
+                  ? "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-none shadow-lg transform hover:scale-105 transition-all duration-300 rounded-full" 
+                  : "border-2 border-purple-300 text-purple-600 hover:bg-gradient-to-r hover:from-purple-100 hover:to-pink-100 hover:border-purple-400 rounded-full shadow-md transform hover:scale-105 transition-all duration-300"
+                }
               >
-                All Products
+                🎈 All Toys
               </Button>
               {categories.map((category) => (
                 <Button
@@ -361,6 +323,10 @@ const Index = () => {
                   variant={selectedCategory === category ? "default" : "outline"}
                   onClick={() => setSelectedCategory(category)}
                   size="sm"
+                  className={selectedCategory === category 
+                    ? "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-none shadow-lg transform hover:scale-105 transition-all duration-300 rounded-full" 
+                    : "border-2 border-purple-300 text-purple-600 hover:bg-gradient-to-r hover:from-purple-100 hover:to-pink-100 hover:border-purple-400 rounded-full shadow-md transform hover:scale-105 transition-all duration-300"
+                  }
                 >
                   {category}
                 </Button>
@@ -370,23 +336,23 @@ const Index = () => {
 
           {/* Products Grid */}
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="product-grid">
               {[...Array(8)].map((_, i) => (
                 <div key={i} className="card-premium h-96 animate-pulse bg-muted"></div>
               ))}
             </div>
           ) : filteredProducts.length === 0 ? (
             <div className="text-center py-12">
-              <Store className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No products found</h3>
-              <p className="text-muted-foreground">
+              <div className="text-6xl mb-4">🧸</div>
+              <h3 className="text-lg font-semibold mb-2 text-purple-600">Oops! No toys found 🤔</h3>
+              <p className="text-gray-600">
                 {searchQuery || selectedCategory !== "all"
-                  ? "Try adjusting your search or filters"
-                  : "Products will appear here once added by admin"}
+                  ? "Try searching for different toys or check other categories! 🎈"
+                  : "New amazing toys will appear here soon! Stay tuned! ✨"}
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="product-grid">
               {filteredProducts.slice(0, 8).map((product) => (
                 <ProductCard
                   key={product.id}
@@ -400,52 +366,120 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Features Section - Now after Products */}
+      <section className="py-16 bg-gradient-to-br from-yellow-50 via-pink-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-purple-600">
+              🌈 Why Choose felixmart for Your Little One? 👶
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              We're committed to providing safe, fun, and educational toys that help your baby grow and smile! 🎈
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <Card className="text-center p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-2 border-purple-100 bg-gradient-to-br from-purple-50 to-pink-50">
+              <CardContent className="pt-6">
+                <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <div className="text-2xl animate-bounce">🏆</div>
+                </div>
+                <h3 className="font-bold text-lg mb-2 text-purple-600">🌟 Premium Baby-Safe Quality</h3>
+                <p className="text-gray-600">All toys are tested for safety, made with non-toxic materials, and designed for tiny hands! 👶✋</p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-2 border-green-100 bg-gradient-to-br from-green-50 to-blue-50">
+              <CardContent className="pt-6">
+                <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <div className="text-2xl animate-bounce delay-200">🚚</div>
+                </div>
+                <h3 className="font-bold text-lg mb-2 text-green-600">🚀 Super Fast Delivery</h3>
+                <p className="text-gray-600">Lightning-fast shipping so your little one doesn't have to wait long for their new favorite toy! ⚡</p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-2 border-purple-100 bg-gradient-to-br from-purple-50 to-pink-50">
+              <CardContent className="pt-6">
+                <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <div className="text-2xl animate-bounce delay-300">🔒</div>
+                </div>
+                <h3 className="font-bold text-lg mb-2 text-purple-600">🛡️ 100% Secure Shopping</h3>
+                <p className="text-gray-600">Safe and encrypted payments with multiple options - shop with complete peace of mind! 💳✨</p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-2 border-orange-100 bg-gradient-to-br from-orange-50 to-yellow-50">
+              <CardContent className="pt-6">
+                <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <div className="text-2xl animate-bounce delay-500">💬</div>
+                </div>
+                <h3 className="font-bold text-lg mb-2 text-orange-600">🤗 Parent Support 24/7</h3>
+                <p className="text-gray-600">Round-the-clock support for all your questions - because parenting never sleeps! 🌙👨‍👩‍👧‍👦</p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* FAQ Section */}
-      <section className="py-16 bg-muted/30">
+      <section className="py-16 bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h2>
-            <p className="text-lg text-muted-foreground">Everything you need to know about shopping with us</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-purple-600">
+              🤔 Questions About Our Baby Toys?
+            </h2>
+            <p className="text-lg text-gray-600">Everything parent need to know about shopping for their little ones! 👶💕</p>
           </div>
 
           <Accordion type="single" collapsible className="space-y-4">
-            <AccordionItem value="item-1" className="bg-white rounded-lg px-6">
-              <AccordionTrigger className="text-left">How long does shipping take?</AccordionTrigger>
-              <AccordionContent>
-                We offer fast delivery across India. Standard shipping takes 3-5 business days, while express delivery 
-                takes 1-2 business days. Delivery charges are ₹70 for all orders.
+            <AccordionItem value="item-1" className="bg-white rounded-lg px-6 shadow-md border border-purple-100">
+              <AccordionTrigger className="text-left font-semibold text-purple-700">
+                🚚 How fast can my baby get their new toy?
+              </AccordionTrigger>
+              <AccordionContent className="text-gray-600">
+                Super fast delivery across India! 🇮🇳 Standard shipping takes 3-5 business days, while express delivery 
+                takes just 1-2 business days. Delivery charges are only ₹70 for all orders - because we know babies can't wait! 😄
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="item-2" className="bg-white rounded-lg px-6">
-              <AccordionTrigger className="text-left">What payment methods do you accept?</AccordionTrigger>
-              <AccordionContent>
-                We accept all major payment methods including UPI, Net Banking, Credit/Debit Cards, and Digital Wallets. 
-                All transactions are secured with 256-bit SSL encryption.
+            <AccordionItem value="item-2" className="bg-white rounded-lg px-6 shadow-md border border-purple-100">
+              <AccordionTrigger className="text-left font-semibold text-purple-700">
+                💳 What payment methods are safe for parents?
+              </AccordionTrigger>
+              <AccordionContent className="text-gray-600">
+                We accept all major payment methods including UPI, Net Banking, Credit/Debit Cards, and Digital Wallets! 
+                All transactions are 100% secure with 256-bit SSL encryption - shop with complete peace of mind! 🔒✨
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="item-3" className="bg-white rounded-lg px-6">
-              <AccordionTrigger className="text-left">Do you have a return policy?</AccordionTrigger>
-              <AccordionContent>
-                We maintain a strict no-refund policy. However, if you receive a damaged or defective product, 
-                please contact us within 24 hours of delivery for a replacement.
+            <AccordionItem value="item-3" className="bg-white rounded-lg px-6 shadow-md border border-purple-100">
+              <AccordionTrigger className="text-left font-semibold text-purple-700">
+                🔄 What if my baby doesn't like their toy?
+              </AccordionTrigger>
+              <AccordionContent className="text-gray-600">
+                We maintain a strict no-refund policy. However, if you receive a damaged or defective toy, 
+                please contact us within 24 hours of delivery for a replacement - your baby's happiness is our priority! 🧸💝
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="item-4" className="bg-white rounded-lg px-6">
-              <AccordionTrigger className="text-left">How can I track my order?</AccordionTrigger>
-              <AccordionContent>
-                Once your order is shipped, you'll receive a tracking number via email. You can also check your 
-                order status by visiting the "My Orders" section in your account.
+            <AccordionItem value="item-4" className="bg-white rounded-lg px-6 shadow-md border border-purple-100">
+              <AccordionTrigger className="text-left font-semibold text-purple-700">
+                📦 Can I track my baby's new toy delivery?
+              </AccordionTrigger>
+              <AccordionContent className="text-gray-600">
+                Absolutely! 📱 Once your order is shipped, you'll receive a tracking number via email. You can also check your 
+                order status anytime by visiting the "My Orders" section in your account - stay updated every step of the way!
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="item-5" className="bg-white rounded-lg px-6">
-              <AccordionTrigger className="text-left">Are your products authentic?</AccordionTrigger>
-              <AccordionContent>
-                Yes, all our products are 100% authentic and handpicked for quality. We work directly with 
-                artisans and trusted suppliers to ensure authenticity and superior craftsmanship.
+            <AccordionItem value="item-5" className="bg-white rounded-lg px-6 shadow-md border border-purple-100">
+              <AccordionTrigger className="text-left font-semibold text-purple-700">
+                🛡️ Are all toys safe for my baby?
+              </AccordionTrigger>
+              <AccordionContent className="text-gray-600">
+                Yes! 🌟 All our toys are 100% baby-safe, made with non-toxic materials, and rigorously tested for safety. 
+                We work only with trusted suppliers who understand that baby safety comes first - every toy is parent-approved! 👶✅
               </AccordionContent>
             </AccordionItem>
           </Accordion>
@@ -453,23 +487,23 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-white">
+      <footer className="bg-gradient-to-br from-purple-900 via-purple-800 to-pink-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Company Info */}
             <div className="space-y-4">
-              <h3 className="text-xl font-bold">felixmart</h3>
-              <p className="text-gray-300">
-                Premium handcrafted products for the modern lifestyle. Quality meets elegance in every piece.
+              <h3 className="text-xl font-bold">🎈 felixmart</h3>
+              <p className="text-purple-100">
+                Making babies smile with safe, fun, and educational toys! Every giggle matters to us. 👶💕✨
               </p>
               <div className="flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <a href="#" className="text-purple-300 hover:text-white transition-colors transform hover:scale-110">
                   <Facebook className="h-5 w-5" />
                 </a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <a href="#" className="text-purple-300 hover:text-white transition-colors transform hover:scale-110">
                   <Twitter className="h-5 w-5" />
                 </a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <a href="#" className="text-purple-300 hover:text-white transition-colors transform hover:scale-110">
                   <Instagram className="h-5 w-5" />
                 </a>
               </div>
@@ -477,62 +511,64 @@ const Index = () => {
 
             {/* Quick Links */}
             <div className="space-y-4">
-              <h4 className="text-lg font-semibold">Quick Links</h4>
+              <h4 className="text-lg font-semibold">🔗 Quick Links</h4>
               <ul className="space-y-2">
-                <li><a href="/" className="text-gray-300 hover:text-white transition-colors">Home</a></li>
-                <li><a href="/orders" className="text-gray-300 hover:text-white transition-colors">My Orders</a></li>
-                <li><a href="/contact" className="text-gray-300 hover:text-white transition-colors">Contact Us</a></li>
-                <li><a href="/about" className="text-gray-300 hover:text-white transition-colors">About Us</a></li>
+                <li><a href="/" className="text-purple-200 hover:text-white transition-colors">🏠 Home</a></li>
+                <li><a href="/orders" className="text-purple-200 hover:text-white transition-colors">📦 My Orders</a></li>
+                <li><a href="/contact" className="text-purple-200 hover:text-white transition-colors">💬 Contact Us</a></li>
+                <li><a href="/about" className="text-purple-200 hover:text-white transition-colors">ℹ️ About Us</a></li>
               </ul>
             </div>
 
             {/* Legal */}
             <div className="space-y-4">
-              <h4 className="text-lg font-semibold">Legal</h4>
+              <h4 className="text-lg font-semibold">📋 Legal & Safety</h4>
               <ul className="space-y-2">
-                <li><a href="/privacy-policy" className="text-gray-300 hover:text-white transition-colors">Privacy Policy</a></li>
-                <li><a href="/terms-of-service" className="text-gray-300 hover:text-white transition-colors">Terms of Service</a></li>
-                <li><a href="/refund-policy" className="text-gray-300 hover:text-white transition-colors">Refund Policy</a></li>
-                <li><a href="/shipping-policy" className="text-gray-300 hover:text-white transition-colors">Shipping Policy</a></li>
+                <li><a href="/privacy-policy" className="text-purple-200 hover:text-white transition-colors">🔒 Privacy Policy</a></li>
+                <li><a href="/terms-of-service" className="text-purple-200 hover:text-white transition-colors">📜 Terms of Service</a></li>
+                <li><a href="/refund-policy" className="text-purple-200 hover:text-white transition-colors">💸 Refund Policy</a></li>
+                <li><a href="/shipping-policy" className="text-purple-200 hover:text-white transition-colors">🚚 Shipping Policy</a></li>
               </ul>
             </div>
 
             {/* Contact Info */}
             <div className="space-y-4">
-              <h4 className="text-lg font-semibold">Contact Info</h4>
-              <div className="space-y-3">
+              <h4 className="text-lg font-semibold">📞 Contact Info</h4>
+              <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <MapPin className="h-5 w-5 text-gray-400 mt-0.5" />
-                  <div className="text-gray-300">
+                  <MapPin className="h-5 w-5 text-purple-300 mt-0.5 flex-shrink-0" />
+                  <div className="text-purple-100 text-sm">
                     <p>Debayan Ghosh</p>
                     <p>Sutragarh, Lankapara</p>
                     <p>Santipur, Nadia</p>
                     <p>West Bengal - 741404</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                  <a href="mailto:support@felixmart.com" className="text-gray-300 hover:text-white transition-colors">
-                    support@felixmart.com
-                  </a>
+                <div className="flex items-start gap-3">
+                  <Mail className="h-5 w-5 text-purple-300 mt-0.5 flex-shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <a href="mailto:debayanghosh408@gmail.com" className="text-purple-200 hover:text-yellow-300 transition-colors text-sm break-all">
+                      💌 debayanghosh408@gmail.com
+                    </a>
+                  </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Phone className="h-5 w-5 text-gray-400" />
-                  <a href="tel:+919876543210" className="text-gray-300 hover:text-white transition-colors">
-                    +91 98765 43210
+                  <Phone className="h-5 w-5 text-purple-300 flex-shrink-0" />
+                  <a href="tel:+919609384607" className="text-purple-200 hover:text-yellow-300 transition-colors text-sm">
+                    📱 +91 9609384607
                   </a>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="border-t border-gray-700 mt-12 pt-8">
+          <div className="border-t border-purple-600 mt-12 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center">
-              <p className="text-gray-400">
-                © 2025 felixmart. All rights reserved.
+              <p className="text-purple-200">
+                © 2025 felixmart. All rights reserved. Made with 💕 for happy babies!
               </p>
-              <p className="text-gray-400 mt-2 md:mt-0">
-                Designed & Developed by Debayan Ghosh
+              <p className="text-purple-200 mt-2 md:mt-0">
+                🎨 Designed & Developed by Debayan Ghosh
               </p>
             </div>
           </div>
