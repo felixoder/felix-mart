@@ -4,6 +4,7 @@ import { User } from "@supabase/supabase-js";
 import { useToast } from "@/hooks/use-toast";
 import { Navbar } from "@/components/Navbar";
 import { ProductCard } from "@/components/ProductCard";
+import { CartSidebar } from "@/components/CartSidebar";
 import { Store, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -27,10 +28,29 @@ const Products = () => {
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [cartItemsCount, setCartItemsCount] = useState(0);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
     checkAuth();
+    
+    // Set up auth state listener for cart updates
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (session?.user) {
+          setUser(session.user);
+          getCartItemsCount(session.user.id);
+        } else {
+          setUser(null);
+          const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+          const totalCount = guestCart.reduce((sum: number, item: any) => sum + item.quantity, 0);
+          setCartItemsCount(totalCount);
+        }
+      }
+    );
+
+    return () => subscription?.unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -72,6 +92,8 @@ const Products = () => {
       }
 
       setIsAdmin(true);
+      // Get initial cart count for admin user
+      getCartItemsCount(session.user.id);
     } catch (error) {
       console.error("Auth check error:", error);
       window.location.href = "/auth";
@@ -103,6 +125,22 @@ const Products = () => {
     }
   };
 
+  const getCartItemsCount = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("cart_items")
+        .select("quantity")
+        .eq("user_id", userId);
+
+      if (error) throw error;
+
+      const totalCount = data.reduce((sum, item) => sum + item.quantity, 0);
+      setCartItemsCount(totalCount);
+    } catch (error) {
+      console.error("Error fetching cart count:", error);
+    }
+  };
+
   const filterProducts = () => {
     let filtered = products;
 
@@ -120,6 +158,61 @@ const Products = () => {
     setFilteredProducts(filtered);
   };
 
+  const handleAddToCart = async (productId: string) => {
+    if (!user) {
+      toast({
+        title: "Please log in",
+        description: "You need to be logged in to add items to cart",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      // Check if item already exists in cart
+      const { data: existingItem } = await supabase
+        .from("cart_items")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("product_id", productId)
+        .single();
+
+      if (existingItem) {
+        // Update quantity
+        const { error } = await supabase
+          .from("cart_items")
+          .update({ quantity: existingItem.quantity + 1 })
+          .eq("id", existingItem.id);
+
+        if (error) throw error;
+      } else {
+        // Insert new item
+        const { error } = await supabase
+          .from("cart_items")
+          .insert({
+            user_id: user.id,
+            product_id: productId,
+            quantity: 1,
+          });
+
+        if (error) throw error;
+      }
+
+      getCartItemsCount(user.id);
+      toast({
+        title: "Success",
+        description: "Product added to cart",
+      });
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      toast({
+        title: "Error",
+        description: "Failed to add product to cart",
+        variant: "destructive",
+      });
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -134,7 +227,11 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar user={user} cartItemsCount={0} onCartClick={() => {}} />
+      <Navbar 
+        user={user} 
+        cartItemsCount={cartItemsCount} 
+        onCartClick={() => setIsCartOpen(true)} 
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
@@ -190,12 +287,27 @@ const Products = () => {
               <ProductCard
                 key={product.id}
                 product={product}
-                onAddToCart={() => {}}
+                onAddToCart={() => handleAddToCart(product.id)}
               />
             ))}
           </div>
         )}
       </div>
+
+      <CartSidebar
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        userId={user?.id || null}
+        onCartUpdate={() => {
+          if (user) {
+            getCartItemsCount(user.id);
+          } else {
+            const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+            const totalCount = guestCart.reduce((sum: number, item: any) => sum + item.quantity, 0);
+            setCartItemsCount(totalCount);
+          }
+        }}
+      />
     </div>
   );
 };
