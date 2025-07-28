@@ -22,8 +22,14 @@ const Checkout = () => {
 
   useEffect(() => {
     const initializeCashfree = async () => {
+      // Use production mode for deployed environments
+      const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+      const cashfreeMode = isProduction ? "production" : "sandbox";
+      
+      console.log('🔧 Initializing Cashfree in mode:', cashfreeMode);
+      
       const cashfreeInstance = await load({
-        mode: "sandbox", // Using sandbox mode for testing
+        mode: cashfreeMode,
       });
       setCashfree(cashfreeInstance);
     };
@@ -193,11 +199,14 @@ const Checkout = () => {
       }
 
       // Create payment session with Cashfree
-      // Use local server for development, Supabase functions for production
-      const isLocalDev = window.location.hostname === 'localhost';
+      // Always use Supabase functions in production
+      const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiBaseUrl = isLocalDev 
         ? "http://localhost:3001" 
         : "https://kwsqhrqhtcuacfvmxwji.supabase.co";
+      
+      console.log('🌍 Environment:', isLocalDev ? 'Development (Local)' : 'Production (Supabase)');
+      console.log('🔗 API Base URL:', apiBaseUrl);
       
       const response = await fetch(
         `${apiBaseUrl}/functions/v1/cashfree-checkout`,
@@ -218,6 +227,7 @@ const Checkout = () => {
       );
 
       const data = await response.json();
+      console.log('💳 Cashfree response:', data);
       
       if (data.payment_session_id) {
         // Clear cart after successful order creation
@@ -226,21 +236,7 @@ const Checkout = () => {
           .delete()
           .eq("user_id", user.id);
 
-        // Handle mock payment sessions for development
-        if (data.payment_session_id.includes('mock')) {
-          toast({
-            title: "Development Mode",
-            description: "Using mock payment for testing. Redirecting to success page...",
-          });
-          
-          // Simulate payment delay
-          setTimeout(() => {
-            window.location.href = `/order-success?order_id=${order.id}&payment_session_id=${data.payment_session_id}`;
-          }, 2000);
-          return;
-        }
-
-        // Real Cashfree payment flow
+        // Production Cashfree payment flow (no demo/mock in production)
         const checkoutOptions = {
           paymentSessionId: data.payment_session_id,
           returnUrl: `${window.location.origin}/order-success?order_id=${order.id}&payment_session_id=${data.payment_session_id}`,

@@ -3,7 +3,11 @@ import { corsHeaders } from "../_shared/cors.ts";
 
 const clientId = Deno.env.get("CASHFREE_CLIENT_ID")!;
 const clientSecret = Deno.env.get("CASHFREE_CLIENT_SECRET")!;
-const environment = "sandbox";
+// Use production environment for deployed functions, sandbox for local development
+const environment = Deno.env.get("ENVIRONMENT") === "production" ? "api" : "sandbox";
+
+console.log('🌍 Cashfree Environment:', environment);
+console.log('🔑 Client ID:', clientId ? `${clientId.substring(0, 8)}...` : 'Not provided');
 
 serve(async (req) => {
   // Handle CORS preflight
@@ -13,6 +17,13 @@ serve(async (req) => {
 
   try {
     const { amount, customer_id, customer_email, customer_phone, order_id } = await req.json();
+
+    console.log('💳 Creating Cashfree order:', {
+      order_id,
+      amount,
+      customer_id,
+      environment
+    });
 
     const order = {
       order_amount: amount,
@@ -24,12 +35,17 @@ serve(async (req) => {
         customer_phone,
       },
       order_meta: {
-        return_url: `${req.headers.get('origin') || 'http://localhost:5173'}/order-success?order_id={order_id}`,
+        return_url: `${req.headers.get('origin') || 'https://luxe-craft-shop1-mjc7bzy1e-debayans-projects.vercel.app'}/order-success?order_id={order_id}`,
       },
     };
 
+    console.log('📤 Sending order to Cashfree:', order);
+
     // Create order directly with Cashfree API
-    const response = await fetch(`https://${environment}.cashfree.com/pg/orders`, {
+    const cashfreeUrl = `https://${environment}.cashfree.com/pg/orders`;
+    console.log('🔗 Cashfree API URL:', cashfreeUrl);
+    
+    const response = await fetch(cashfreeUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -40,12 +56,16 @@ serve(async (req) => {
       body: JSON.stringify(order),
     });
 
+    console.log('📥 Cashfree response status:', response.status);
+
     if (!response.ok) {
       const errorData = await response.text();
+      console.error('❌ Cashfree API error:', errorData);
       throw new Error(`Cashfree API error: ${response.status} - ${errorData}`);
     }
 
     const responseData = await response.json();
+    console.log('✅ Cashfree order created successfully:', responseData.order_id);
     
     return new Response(JSON.stringify(responseData), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
