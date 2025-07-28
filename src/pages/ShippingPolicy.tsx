@@ -352,11 +352,11 @@ const ShippingPolicy = () => {
                 For any shipping-related queries, tracking issues, or delivery concerns, please contact our customer support:
               </p>
               <div className="bg-muted/50 p-4 rounded-lg">
-                <p><strong>Luxe Craft Shop Shipping Support</strong></p>
+                <p><strong>felixmart Shipping Support</strong></p>
                 <p>Debayan Ghosh</p>
                 <p>Sutragarh, Lankapara</p>
                 <p>Santipur, Nadia, West Bengal - 741404</p>
-                <p>Email: support@luxecraftshop.com</p>
+                <p>Email: support@felixmart.com</p>
                 <p>Phone: +91 98765 43210</p>
                 <p className="text-sm text-muted-foreground mt-2">
                   Available: Monday to Saturday, 9:00 AM to 6:00 PM IST

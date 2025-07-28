@@ -72,7 +72,7 @@ const TermsOfService = () => {
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                By accessing and using Luxe Craft Shop website and services, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
+                By accessing and using felixmart website and services, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
               </p>
             </CardContent>
           </Card>
@@ -188,7 +188,7 @@ const TermsOfService = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                <li>All content on this website is owned by Luxe Craft Shop or its licensors</li>
+                <li>All content on this website is owned by felixmart or its licensors</li>
                 <li>You may not copy, reproduce, or distribute any content without permission</li>
                 <li>Product images and descriptions are for personal use only</li>
                 <li>Trademarks and logos are protected intellectual property</li>
@@ -219,7 +219,7 @@ const TermsOfService = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-muted-foreground">
-                Luxe Craft Shop shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your use of the service.
+                felixmart shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your use of the service.
               </p>
               <p className="text-muted-foreground">
                 Our total liability shall not exceed the amount paid by you for the specific product or service giving rise to the claim.
@@ -258,11 +258,11 @@ const TermsOfService = () => {
                 If you have any questions about these Terms of Service, please contact us:
               </p>
               <div className="bg-muted/50 p-4 rounded-lg">
-                <p><strong>Luxe Craft Shop</strong></p>
+                <p><strong>felixmart</strong></p>
                 <p>Debayan Ghosh</p>
                 <p>Sutragarh, Lankapara</p>
                 <p>Santipur, Nadia, West Bengal - 741404</p>
-                <p>Email: support@luxecraftshop.com</p>
+                <p>Email: support@felixmart.com</p>
                 <p>Phone: +91 98765 43210</p>
               </div>
             </CardContent>

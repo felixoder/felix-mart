@@ -122,7 +122,7 @@ export const Navbar = ({ user, cartItemsCount, onCartClick }: NavbarProps) => {
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <Store className="h-8 w-8 text-white glow" />
-            <span className="text-xl font-bold text-white">Premium Store</span>
+            <span className="text-xl font-bold text-white">FelixMart</span>
           </div>
 
           {/* Desktop Navigation */}

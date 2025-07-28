@@ -71,7 +71,7 @@ const RefundPolicy = () => {
           <Alert className="border-red-200 bg-red-50">
             <AlertTriangle className="h-5 w-5 text-red-600" />
             <AlertDescription className="text-red-800">
-              <strong className="font-semibold">Important Notice:</strong> Luxe Craft Shop maintains a strict no-refund policy. All sales are final once payment is confirmed. Please read this policy carefully before making a purchase.
+              <strong className="font-semibold">Important Notice:</strong> felixmart maintains a strict no-refund policy. All sales are final once payment is confirmed. Please read this policy carefully before making a purchase.
             </AlertDescription>
           </Alert>
 
@@ -93,7 +93,7 @@ const RefundPolicy = () => {
                 </div>
               </div>
               <p className="text-muted-foreground">
-                By placing an order with Luxe Craft Shop, you acknowledge and agree to this no-refund policy. Please ensure you are satisfied with your purchase decision before completing your order.
+                By placing an order with felixmart, you acknowledge and agree to this no-refund policy. Please ensure you are satisfied with your purchase decision before completing your order.
               </p>
             </CardContent>
           </Card>
@@ -224,11 +224,11 @@ const RefundPolicy = () => {
                 If you have received a damaged or defective product, or if you have any questions about this policy, please contact us immediately:
               </p>
               <div className="bg-muted/50 p-4 rounded-lg">
-                <p><strong>Luxe Craft Shop Customer Support</strong></p>
+                <p><strong>felixmart Customer Support</strong></p>
                 <p>Debayan Ghosh</p>
                 <p>Sutragarh, Lankapara</p>
                 <p>Santipur, Nadia, West Bengal - 741404</p>
-                <p>Email: support@luxecraftshop.com</p>
+                <p>Email: support@felixmart.com</p>
                 <p>Phone: +91 98765 43210</p>
                 <p className="text-sm text-muted-foreground mt-2">
                   Available: Monday to Saturday, 9:00 AM to 6:00 PM IST

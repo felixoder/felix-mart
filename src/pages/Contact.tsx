@@ -187,7 +187,7 @@ const Contact = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-lg font-semibold mb-2">support@luxecraftshop.com</p>
+                <p className="text-lg font-semibold mb-2">support@felixmart.com</p>
                 <p className="text-muted-foreground mb-4">
                   Send us your queries and we'll respond within 24 hours
                 </p>
@@ -209,7 +209,7 @@ const Contact = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-1 mb-4">
-                  <p className="font-semibold">Luxe Craft Shop</p>
+                  <p className="font-semibold">felixmart</p>
                   <p>Debayan Ghosh</p>
                   <p>Sutragarh, Lankapara</p>
                   <p>Santipur, Nadia</p>

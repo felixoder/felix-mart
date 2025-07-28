@@ -204,11 +204,11 @@ const PrivacyPolicy = () => {
                 If you have any questions about this Privacy Policy or our data practices, please contact us:
               </p>
               <div className="bg-muted/50 p-4 rounded-lg">
-                <p><strong>Luxe Craft Shop</strong></p>
+                <p><strong>felixmart</strong></p>
                 <p>Debayan Ghosh</p>
                 <p>Sutragarh, Lankapara</p>
                 <p>Santipur, Nadia, West Bengal - 741404</p>
-                <p>Email: support@luxecraftshop.com</p>
+                <p>Email: support@felixmart.com</p>
                 <p>Phone: +91 98765 43210</p>
               </div>
             </CardContent>

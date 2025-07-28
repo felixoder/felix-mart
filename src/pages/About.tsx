@@ -71,7 +71,7 @@ const About = () => {
           <div className="bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
             <Heart className="h-10 w-10 text-primary" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">About Luxe Craft Shop</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">About felixmart</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Where premium craftsmanship meets modern elegance. We're passionate about bringing you handpicked, 
             high-quality products that enhance your lifestyle and express your unique taste.
@@ -86,7 +86,7 @@ const About = () => {
                 <h2 className="text-3xl font-bold mb-6">Our Story</h2>
                 <div className="space-y-4 text-muted-foreground">
                   <p>
-                    Luxe Craft Shop was born from a simple belief: everyone deserves access to beautifully crafted, 
+                    felixmart was born from a simple belief: everyone deserves access to beautifully crafted, 
                     premium quality products that reflect their personal style and values.
                   </p>
                   <p>
@@ -254,7 +254,7 @@ const About = () => {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">What Makes Us Different</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Discover the unique advantages that set Luxe Craft Shop apart from other online retailers.
+              Discover the unique advantages that set felixmart apart from other online retailers.
             </p>
           </div>
 
@@ -328,7 +328,7 @@ const About = () => {
               <h2 className="text-3xl font-bold mb-6">A Note from Our Founder</h2>
               <div className="max-w-3xl mx-auto">
                 <blockquote className="text-lg text-muted-foreground italic mb-6">
-                  "When I started Luxe Craft Shop, my vision was simple: to create a place where quality meets 
+                  "When I started felixmart, my vision was simple: to create a place where quality meets 
                   affordability, where every customer feels valued, and where beautiful products can be discovered 
                   by everyone. Today, I'm proud to see that vision come to life through our growing community of 
                   satisfied customers across India."
@@ -336,7 +336,7 @@ const About = () => {
                 <div className="flex items-center justify-center">
                   <div className="text-center">
                     <p className="font-semibold text-lg">Debayan Ghosh</p>
-                    <p className="text-muted-foreground">Founder & CEO, Luxe Craft Shop</p>
+                    <p className="text-muted-foreground">Founder & CEO, felixmart</p>
                     <p className="text-sm text-muted-foreground mt-1">Santipur, Nadia, West Bengal</p>
                   </div>
                 </div>

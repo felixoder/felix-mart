@@ -215,7 +215,7 @@ const Index = () => {
                 <h1 className="text-4xl md:text-6xl font-bold leading-tight">
                   Welcome to{" "}
                   <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                    Luxe Craft Shop
+                    felixmart Premium Store
                   </span>
                 </h1>
                 <p className="text-lg md:text-xl text-white/90 max-w-lg">
@@ -272,7 +272,7 @@ const Index = () => {
       <section className="py-16 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Choose Luxe Craft Shop?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Choose felixmart?</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               We're committed to providing exceptional quality and service that exceeds expectations
             </p>
@@ -458,7 +458,7 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Company Info */}
             <div className="space-y-4">
-              <h3 className="text-xl font-bold">Luxe Craft Shop</h3>
+              <h3 className="text-xl font-bold">felixmart</h3>
               <p className="text-gray-300">
                 Premium handcrafted products for the modern lifestyle. Quality meets elegance in every piece.
               </p>
@@ -512,8 +512,8 @@ const Index = () => {
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail className="h-5 w-5 text-gray-400" />
-                  <a href="mailto:support@luxecraftshop.com" className="text-gray-300 hover:text-white transition-colors">
-                    support@luxecraftshop.com
+                  <a href="mailto:support@felixmart.com" className="text-gray-300 hover:text-white transition-colors">
+                    support@felixmart.com
                   </a>
                 </div>
                 <div className="flex items-center gap-3">
@@ -529,7 +529,7 @@ const Index = () => {
           <div className="border-t border-gray-700 mt-12 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <p className="text-gray-400">
-                © 2025 Luxe Craft Shop. All rights reserved.
+                © 2025 felixmart. All rights reserved.
               </p>
               <p className="text-gray-400 mt-2 md:mt-0">
                 Designed & Developed by Debayan Ghosh

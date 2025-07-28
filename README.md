@@ -1,4 +1,4 @@
-# Luxe Craft Shop - Premium E-commerce Store
+# felixmart - Premium E-commerce Store
 
 A modern, full-featured e-commerce platform built with React, TypeScript, Tailwind CSS, and Supabase, featuring integrated Cashfree payment processing.
 
@@ -26,7 +26,7 @@ A modern, full-featured e-commerce platform built with React, TypeScript, Tailwi
 git clone <YOUR_GIT_URL>
 
 # Navigate to project directory
-cd luxe-craft-shop
+cd felixmart
 
 # Install dependencies
 npm install

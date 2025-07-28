@@ -3,7 +3,7 @@
 # Deployment and Setup Script for Cashfree Integration
 # This script helps set up the Cashfree payment integration
 
-echo "🚀 Luxe Craft Shop - Cashfree Integration Setup"
+echo "🚀 felixmart - Cashfree Integration Setup"
 echo "=============================================="
 
 # Function to check if command exists
