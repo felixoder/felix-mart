@@ -33,9 +33,10 @@ interface CartSidebarProps {
   isOpen: boolean;
   onClose: () => void;
   userId: string | null;
+  onCartUpdate?: () => void;
 }
 
-export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
+export const CartSidebar = ({ isOpen, onClose, userId, onCartUpdate }: CartSidebarProps) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -115,14 +116,16 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
     }
   };
 
-  const updateQuantity = async (itemId: string, newQuantity: number) => {
+  const updateQuantity = async (itemId: string, newQuantity: number, isProductId: boolean = false) => {
     if (newQuantity < 1) {
-      removeItem(itemId);
+      removeItem(itemId, isProductId);
       return;
     }
 
     // Find the item to check stock
-    const item = cartItems.find(cartItem => cartItem.id === itemId);
+    const item = cartItems.find(cartItem => 
+      isProductId ? cartItem.product_id === itemId : cartItem.id === itemId
+    );
     if (item && newQuantity > item.product.stock_quantity) {
       toast({
         title: "Insufficient Stock",
@@ -137,13 +140,15 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
         const { error } = await supabase
           .from("cart_items")
           .update({ quantity: newQuantity })
-          .eq("id", itemId);
+          .eq(isProductId ? "product_id" : "id", itemId);
 
         if (error) throw error;
 
         setCartItems(items =>
           items.map(item =>
-            item.id === itemId ? { ...item, quantity: newQuantity } : item
+            (isProductId ? item.product_id === itemId : item.id === itemId) 
+              ? { ...item, quantity: newQuantity } 
+              : item
           )
         );
 
@@ -151,6 +156,9 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
           title: "Success",
           description: "Cart updated",
         });
+
+        // Notify parent component of cart update
+        onCartUpdate?.();
       } catch (error) {
         console.error("Error updating cart:", error);
         toast({
@@ -160,6 +168,7 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
         });
       }
     } else {
+      // For guest users, always use product_id
       const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
       const itemIndex = guestCart.findIndex((item: any) => item.product_id === itemId);
       if (itemIndex > -1) {
@@ -167,25 +176,32 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
       }
       localStorage.setItem("guestCart", JSON.stringify(guestCart));
       fetchCartItems();
+      // Notify parent component of cart update
+      onCartUpdate?.();
     }
   };
 
-  const removeItem = async (itemId: string) => {
+  const removeItem = async (itemId: string, isProductId: boolean = false) => {
     if (userId) {
       try {
         const { error } = await supabase
           .from("cart_items")
           .delete()
-          .eq("id", itemId);
+          .eq(isProductId ? "product_id" : "id", itemId);
 
         if (error) throw error;
 
-        setCartItems(items => items.filter(item => item.id !== itemId));
+        setCartItems(items => items.filter(item => 
+          isProductId ? item.product_id !== itemId : item.id !== itemId
+        ));
 
         toast({
           title: "Success",
           description: "Item removed from cart",
         });
+
+        // Notify parent component of cart update
+        onCartUpdate?.();
       } catch (error) {
         console.error("Error removing item:", error);
         toast({
@@ -195,10 +211,13 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
         });
       }
     } else {
+      // For guest users, always use product_id
       const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
       const updatedCart = guestCart.filter((item: any) => item.product_id !== itemId);
       localStorage.setItem("guestCart", JSON.stringify(updatedCart));
       fetchCartItems();
+      // Notify parent component of cart update
+      onCartUpdate?.();
     }
   };
 
@@ -272,7 +291,11 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
                               variant="outline"
                               size="icon"
                               className="h-8 w-8"
-                              onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
+                              onClick={() => updateQuantity(
+                                userId ? item.id : item.product_id, 
+                                item.quantity - 1, 
+                                !userId
+                              )}
                             >
                               <Minus className="h-3 w-3" />
                             </Button>
@@ -283,7 +306,11 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
                               variant="outline"
                               size="icon"
                               className="h-8 w-8"
-                              onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
+                              onClick={() => updateQuantity(
+                                userId ? item.id : item.product_id, 
+                                item.quantity + 1, 
+                                !userId
+                              )}
                               disabled={item.quantity >= item.product.stock_quantity}
                             >
                               <Plus className="h-3 w-3" />
@@ -292,7 +319,10 @@ export const CartSidebar = ({ isOpen, onClose, userId }: CartSidebarProps) => {
                               variant="ghost"
                               size="icon"
                               className="h-8 w-8 text-destructive hover:text-destructive"
-                              onClick={() => removeItem(item.product_id)}
+                              onClick={() => removeItem(
+                                userId ? item.id : item.product_id, 
+                                !userId
+                              )}
                             >
                               <Trash2 className="h-3 w-3" />
                             </Button>

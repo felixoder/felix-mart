@@ -229,7 +229,7 @@ const Index = () => {
                   <ShoppingBag className="mr-2 h-5 w-5" />
                   Shop Now
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
+                <Button size="lg" variant="outline" className="border-white text-black bg-white hover:bg-white/90 hover:text-black font-semibold">
                   Learn More
                 </Button>
               </div>
@@ -543,6 +543,15 @@ const Index = () => {
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
         userId={user?.id || null}
+        onCartUpdate={() => {
+          if (user) {
+            getCartItemsCount(user.id);
+          } else {
+            const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+            const totalCount = guestCart.reduce((sum: number, item: any) => sum + item.quantity, 0);
+            setCartItemsCount(totalCount);
+          }
+        }}
       />
     </div>
   );
