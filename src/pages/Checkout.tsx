@@ -22,11 +22,12 @@ const Checkout = () => {
 
   useEffect(() => {
     const initializeCashfree = async () => {
-      // Use production mode for deployed environments
-      const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
-      const cashfreeMode = isProduction ? "production" : "sandbox";
+      // Always use production mode since we're using production credentials
+      // The backend function will handle sandbox vs production API endpoints
+      const cashfreeMode = "production";
       
       console.log('🔧 Initializing Cashfree in mode:', cashfreeMode);
+      console.log('🏠 Current hostname:', window.location.hostname);
       
       const cashfreeInstance = await load({
         mode: cashfreeMode,
@@ -201,6 +202,7 @@ const Checkout = () => {
       // Create payment session with Cashfree
       // ALWAYS use real Supabase functions - no local server, no mock
       const apiBaseUrl = "https://kwsqhrqhtcuacfvmxwji.supabase.co";
+      const anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3c3FocnFodGN1YWNmdm14d2ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM1NDEyNTgsImV4cCI6MjA2OTExNzI1OH0.w677z2scEUSeLvsVqA3pPBUx0TihKB3LP1QuedLgqvQ";
       
       console.log('🌍 Using REAL Cashfree API via Supabase functions');
       console.log('🔗 API Base URL:', apiBaseUrl);
@@ -212,7 +214,7 @@ const Checkout = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${session?.access_token}`,
+            "Authorization": `Bearer ${anonKey}`,
           },
           body: JSON.stringify({
             amount: total,
@@ -226,8 +228,20 @@ const Checkout = () => {
 
       const data = await response.json();
       console.log('💳 Cashfree response:', data);
+      console.log('📊 Response status:', response.status);
+      console.log('📋 Full response object:', {
+        status: response.status,
+        statusText: response.statusText,
+        data: data
+      });
+      
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status} - ${JSON.stringify(data)}`);
+      }
       
       if (data.payment_session_id) {
+        console.log('✅ Payment session ID found:', data.payment_session_id);
+        
         // Clear cart after successful order creation
         await supabase
           .from("cart_items")
@@ -248,15 +262,17 @@ const Checkout = () => {
           }
         };
         
+        console.log('🚀 Initiating Cashfree checkout with options:', checkoutOptions);
         cashfree.checkout(checkoutOptions);
       } else {
-        throw new Error("Failed to create payment session");
+        console.error('❌ No payment_session_id in response:', data);
+        throw new Error(`Failed to create payment session: ${JSON.stringify(data)}`);
       }
     } catch (error) {
       console.error("Payment error:", error);
       toast({
         title: "Error",
-        description: "Failed to create payment session",
+        description: error instanceof Error ? error.message : "Failed to create payment session",
         variant: "destructive",
       });
     }

@@ -3,8 +3,8 @@ import { corsHeaders } from "../_shared/cors.ts";
 
 const clientId = Deno.env.get("CASHFREE_CLIENT_ID")!;
 const clientSecret = Deno.env.get("CASHFREE_CLIENT_SECRET")!;
-// Use production environment for deployed functions, sandbox for local development
-const environment = Deno.env.get("ENVIRONMENT") === "production" ? "api" : "sandbox";
+// Always use production API since we have production credentials
+const environment = "api";
 
 console.log('🌍 Cashfree Environment:', environment);
 console.log('🔑 Client ID:', clientId ? `${clientId.substring(0, 8)}...` : 'Not provided');
