@@ -441,15 +441,6 @@ const OrderSuccess = () => {
               <span>{new Date(orderDetails.created_at).toLocaleDateString()}</span>
             </div>
             <div className="flex justify-between">
-              <span className="font-medium">Payment Status:</span>
-              <span className={`capitalize ${
-                paymentStatus === 'success' ? 'text-green-600' : 
-                paymentStatus === 'failed' ? 'text-destructive' : 'text-yellow-600'
-              }`}>
-                {paymentStatus}
-              </span>
-            </div>
-            <div className="flex justify-between">
               <span className="font-medium">Order Status:</span>
               <span className="capitalize">{orderDetails.status}</span>
             </div>
