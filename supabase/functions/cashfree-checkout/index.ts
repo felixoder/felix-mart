@@ -25,6 +25,25 @@ serve(async (req) => {
       environment
     });
 
+    // Determine the correct return URL based on environment
+    const origin = req.headers.get('origin');
+    let returnUrl: string;
+    
+    if (environment === "api") {
+      // For production API, always use the production URL (HTTPS required)
+      returnUrl = 'https://luxe-craft-shop1-mjc7bzy1e-debayans-projects.vercel.app/order-success?order_id={order_id}';
+    } else {
+      // For sandbox/development, we can use a test HTTPS URL or localhost with HTTPS
+      if (origin && origin.includes('localhost')) {
+        // For local development, use the production URL since Cashfree requires HTTPS
+        returnUrl = 'https://luxe-craft-shop1-mjc7bzy1e-debayans-projects.vercel.app/order-success?order_id={order_id}';
+      } else {
+        returnUrl = `${origin || 'https://luxe-craft-shop1-mjc7bzy1e-debayans-projects.vercel.app'}/order-success?order_id={order_id}`;
+      }
+    }
+
+    console.log('🔗 Return URL:', returnUrl);
+
     const order = {
       order_amount: amount,
       order_currency: "INR",
@@ -35,7 +54,7 @@ serve(async (req) => {
         customer_phone,
       },
       order_meta: {
-        return_url: `${req.headers.get('origin') || 'https://luxe-craft-shop1-mjc7bzy1e-debayans-projects.vercel.app'}/order-success?order_id={order_id}`,
+        return_url: returnUrl,
       },
     };
 
