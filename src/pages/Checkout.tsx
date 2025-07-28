@@ -199,14 +199,20 @@ const Checkout = () => {
       }
 
       // Create payment session with Cashfree
-      // Always use Supabase functions in production
+      // Force Supabase functions in production builds
       const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const apiBaseUrl = isLocalDev 
+      const isVercelDeploy = window.location.hostname.includes('vercel.app');
+      
+      // Always use Supabase for Vercel deployments, regardless of other conditions
+      const apiBaseUrl = (isLocalDev && !isVercelDeploy) 
         ? "http://localhost:3001" 
         : "https://kwsqhrqhtcuacfvmxwji.supabase.co";
       
-      console.log('🌍 Environment:', isLocalDev ? 'Development (Local)' : 'Production (Supabase)');
-      console.log('🔗 API Base URL:', apiBaseUrl);
+      console.log('🌍 Environment Detection:');
+      console.log('  - Hostname:', window.location.hostname);
+      console.log('  - Is Local Dev:', isLocalDev);
+      console.log('  - Is Vercel Deploy:', isVercelDeploy);
+      console.log('  - API Base URL:', apiBaseUrl);
       
       const response = await fetch(
         `${apiBaseUrl}/functions/v1/cashfree-checkout`,
@@ -214,7 +220,7 @@ const Checkout = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            ...(isLocalDev ? {} : { Authorization: `Bearer ${session?.access_token}` }),
+            ...(!isLocalDev || isVercelDeploy ? { Authorization: `Bearer ${session?.access_token}` } : {}),
           },
           body: JSON.stringify({
             amount: total,

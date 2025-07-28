@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cashfree Production Test with Auth</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>Cashfree Production API Test</h1>
+    
+    <div id="auth-section">
+        <h3>Step 1: Authenticate</h3>
+        <input type="email" id="email" placeholder="Your email" value="test@example.com">
+        <input type="password" id="password" placeholder="Your password" value="password123">
+        <button onclick="signIn()">Sign In</button>
+        <button onclick="signUp()">Sign Up</button>
+        <div id="auth-status"></div>
+    </div>
+    
+    <div id="test-section" style="display: none;">
+        <h3>Step 2: Test Cashfree API</h3>
+        <button onclick="testCashfreeAPI()">Test Cashfree API (Authenticated)</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Initialize Supabase
+        const supabaseUrl = 'https://kwsqhrqhtcuacfvmxwji.supabase.co'
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3c3FocnFodGN1YWNmdm14d2ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM1NDEyNTgsImV4cCI6MjA2OTExNzI1OH0.w677z2scEUSeLvsVqA3pPBUx0TihKB3LP1QuedLgqvQ'
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey)
+        
+        let currentSession = null;
+
+        async function signUp() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            const { data, error } = await supabase.auth.signUp({
+                email: email,
+                password: password,
+            });
+            
+            const authStatus = document.getElementById('auth-status');
+            if (error) {
+                authStatus.innerHTML = `<p style="color: red;">Sign up error: ${error.message}</p>`;
+            } else {
+                authStatus.innerHTML = `<p style="color: green;">Sign up successful! Check your email or try signing in.</p>`;
+            }
+        }
+
+        async function signIn() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
+            
+            const authStatus = document.getElementById('auth-status');
+            if (error) {
+                authStatus.innerHTML = `<p style="color: red;">Sign in error: ${error.message}</p>`;
+            } else {
+                currentSession = data.session;
+                authStatus.innerHTML = `<p style="color: green;">✅ Signed in successfully!</p>`;
+                document.getElementById('auth-section').style.display = 'none';
+                document.getElementById('test-section').style.display = 'block';
+            }
+        }
+
+        async function testCashfreeAPI() {
+            if (!currentSession) {
+                alert('Please sign in first!');
+                return;
+            }
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing with authentication...';
+
+            try {
+                const response = await fetch('https://kwsqhrqhtcuacfvmxwji.supabase.co/functions/v1/cashfree-checkout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentSession.access_token}`,
+                    },
+                    body: JSON.stringify({
+                        amount: 100,
+                        customer_id: currentSession.user.id,
+                        customer_email: currentSession.user.email,
+                        customer_phone: '9999999999',
+                        order_id: 'test_order_' + Date.now()
+                    })
+                });
+
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <h3>Response:</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+                
+                if (data.error && data.error.includes('authentication Failed')) {
+                    resultDiv.innerHTML += '<p style="color: red;"><strong>❌ Cashfree credentials not set in Supabase!</strong></p>';
+                } else if (data.payment_session_id) {
+                    resultDiv.innerHTML += '<p style="color: green;"><strong>✅ Cashfree API working!</strong></p>';
+                } else if (data.error) {
+                    resultDiv.innerHTML += `<p style="color: orange;"><strong>⚠️ Error: ${data.error}</strong></p>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3>Error:</h3>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        }
+
+        // Check if already signed in
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (session) {
+                currentSession = session;
+                document.getElementById('auth-status').innerHTML = `<p style="color: green;">✅ Already signed in!</p>`;
+                document.getElementById('auth-section').style.display = 'none';
+                document.getElementById('test-section').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
