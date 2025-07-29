@@ -97,7 +97,7 @@ const Contact = () => {
     try {
       // Save contact submission to Supabase
       const { error } = await supabase
-        .from('contact_submissions' as any)
+        .from('contact_submissions')
         .insert([
           {
             name: formData.name,
@@ -107,7 +107,7 @@ const Contact = () => {
             user_id: user?.id || null,
             status: 'new'
           }
-        ]);
+        ] as any);
 
       if (error) {
         console.error('Error submitting contact form:', error);

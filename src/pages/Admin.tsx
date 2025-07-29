@@ -129,6 +129,36 @@ const Admin = () => {
       fetchCategories();
       fetchOrders();
       fetchContactSubmissions();
+
+      // Set up real-time subscription for contact submissions
+      const contactSubscription = supabase
+        .channel('contact_submissions_changes')
+        .on(
+          'postgres_changes',
+          {
+            event: '*', // Listen to all events (INSERT, UPDATE, DELETE)
+            schema: 'public',
+            table: 'contact_submissions'
+          },
+          (payload) => {
+            console.log('Contact submission change detected:', payload);
+            
+            if (payload.eventType === 'INSERT') {
+              toast({
+                title: "New Contact Submission",
+                description: `New message from ${payload.new.name}`,
+              });
+            }
+            
+            fetchContactSubmissions(); // Refresh the list when any change occurs
+          }
+        )
+        .subscribe();
+
+      // Cleanup subscription on unmount
+      return () => {
+        contactSubscription.unsubscribe();
+      };
     }
   }, [isAdmin]);
 
@@ -542,18 +572,36 @@ const Admin = () => {
 
   const fetchContactSubmissions = async () => {
     try {
-      const { data, error } = await supabase
-        .from("contact_submissions")
-        .select("*")
-        .order("created_at", { ascending: false });
+      console.log("Fetching contact submissions using RPC function...");
+      
+      // Using type assertion since the RPC function isn't in types yet
+      const { data, error } = await (supabase as any)
+        .rpc('get_all_contact_submissions');
+
+      console.log("RPC result:", { data: data?.length || 0, error });
 
       if (error) throw error;
       setContactSubmissions(data || []);
-    } catch (error) {
+      
+      if (data && data.length > 0) {
+        console.log("Successfully loaded", data.length, "contact submissions");
+        toast({
+          title: "Success",
+          description: `Loaded ${data.length} contact submission(s)`,
+        });
+      } else {
+        console.warn("No contact submissions found");
+        toast({
+          title: "No Data",
+          description: "No contact submissions found.",
+          variant: "destructive",
+        });
+      }
+    } catch (error: any) {
       console.error("Error fetching contact submissions:", error);
       toast({
         title: "Error",
-        description: "Failed to load contact submissions",
+        description: `Failed to load contact submissions: ${error.message}`,
         variant: "destructive",
       });
     }
@@ -561,10 +609,14 @@ const Admin = () => {
 
   const updateContactStatus = async (submissionId: string, status: string) => {
     try {
-      const { error } = await supabase
-        .from("contact_submissions")
-        .update({ status })
-        .eq("id", submissionId);
+      console.log("Updating contact status using RPC function...");
+      
+      // Using type assertion since the RPC function isn't in types yet
+      const { error } = await (supabase as any)
+        .rpc('update_contact_submission_status', {
+          submission_id: submissionId,
+          new_status: status
+        });
 
       if (error) throw error;
 
@@ -574,11 +626,11 @@ const Admin = () => {
       });
 
       fetchContactSubmissions(); // Refresh the list
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error updating contact status:", error);
       toast({
         title: "Error",
-        description: "Failed to update contact status",
+        description: `Failed to update contact status: ${error.message}`,
         variant: "destructive",
       });
     }
@@ -1310,10 +1362,23 @@ const Admin = () => {
           /* Contact Submissions Table */
           <Card>
             <CardHeader>
-              <CardTitle>Contact Submissions</CardTitle>
-              <CardDescription>
-                View and manage customer contact form submissions
-              </CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Contact Submissions</CardTitle>
+                  <CardDescription>
+                    View and manage customer contact form submissions
+                  </CardDescription>
+                </div>
+                <Button
+                  onClick={fetchContactSubmissions}
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-2"
+                >
+                  <Mail className="h-4 w-4" />
+                  Refresh
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
               <div className="rounded-md border">

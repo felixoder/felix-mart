@@ -85,12 +85,19 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/d63ea0c7-2d4b-4011-92d5-ad90d5ba0a0c) and click on Share -> Publish.
+This project can be deployed to various platforms:
 
-## Can I connect a custom domain to my Lovable project?
+- **Vercel**: Connect your GitHub repository and deploy automatically
+- **Netlify**: Drag and drop the built files or connect via Git
+- **Railway**: Connect via GitHub and deploy with automatic builds
+- **Static hosting**: Build the project with `npm run build` and upload the `dist` folder
 
-Yes, you can!
+## Can I connect a custom domain to my project?
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Yes, you can! The process depends on your hosting platform:
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- **Vercel**: Go to Project Settings > Domains
+- **Netlify**: Go to Site Settings > Domain Management
+- **Railway**: Go to Project Settings > Domains
+
+Each platform has its own documentation for setting up custom domains.
