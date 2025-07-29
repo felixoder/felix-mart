@@ -262,8 +262,8 @@ const TermsOfService = () => {
                 <p>Debayan Ghosh</p>
                 <p>Sutragarh, Lankapara</p>
                 <p>Santipur, Nadia, West Bengal - 741404</p>
-                <p>Email: support@felixmart.com</p>
-                <p>Phone: +91 98765 43210</p>
+                <p>Email: debayanghosh408@gmail.com</p>
+                <p>Phone: +91 9609384607</p>
               </div>
             </CardContent>
           </Card>
