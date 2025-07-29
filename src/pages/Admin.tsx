@@ -103,6 +103,8 @@ const Admin = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [contactSubmissions, setContactSubmissions] = useState<ContactSubmission[]>([]);
+  const [filteredContactSubmissions, setFilteredContactSubmissions] = useState<ContactSubmission[]>([]);
+  const [contactStatusFilter, setContactStatusFilter] = useState<string>('all');
   const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'contacts'>('products');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -161,6 +163,18 @@ const Admin = () => {
       };
     }
   }, [isAdmin]);
+
+  // Filter contact submissions when the data or filter changes
+  useEffect(() => {
+    if (contactStatusFilter === 'all') {
+      setFilteredContactSubmissions(contactSubmissions);
+    } else {
+      const filtered = contactSubmissions.filter(submission => 
+        submission.status === contactStatusFilter
+      );
+      setFilteredContactSubmissions(filtered);
+    }
+  }, [contactSubmissions, contactStatusFilter]);
 
   const checkAuth = async () => {
     try {
@@ -585,17 +599,8 @@ const Admin = () => {
       
       if (data && data.length > 0) {
         console.log("Successfully loaded", data.length, "contact submissions");
-        toast({
-          title: "Success",
-          description: `Loaded ${data.length} contact submission(s)`,
-        });
       } else {
         console.warn("No contact submissions found");
-        toast({
-          title: "No Data",
-          description: "No contact submissions found.",
-          variant: "destructive",
-        });
       }
     } catch (error: any) {
       console.error("Error fetching contact submissions:", error);
@@ -1369,15 +1374,36 @@ const Admin = () => {
                     View and manage customer contact form submissions
                   </CardDescription>
                 </div>
-                <Button
-                  onClick={fetchContactSubmissions}
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center gap-2"
-                >
-                  <Mail className="h-4 w-4" />
-                  Refresh
-                </Button>
+                <div className="flex items-center gap-4">
+                  {/* Status Filter */}
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium">Filter by status:</span>
+                    <Select
+                      value={contactStatusFilter}
+                      onValueChange={setContactStatusFilter}
+                    >
+                      <SelectTrigger className="w-32">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All ({contactSubmissions.length})</SelectItem>
+                        <SelectItem value="new">New ({contactSubmissions.filter(s => s.status === 'new').length})</SelectItem>
+                        <SelectItem value="read">Read ({contactSubmissions.filter(s => s.status === 'read').length})</SelectItem>
+                        <SelectItem value="replied">Replied ({contactSubmissions.filter(s => s.status === 'replied').length})</SelectItem>
+                        <SelectItem value="closed">Closed ({contactSubmissions.filter(s => s.status === 'closed').length})</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Button
+                    onClick={fetchContactSubmissions}
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-2"
+                  >
+                    <Mail className="h-4 w-4" />
+                    Refresh
+                  </Button>
+                </div>
               </div>
             </CardHeader>
             <CardContent>
@@ -1395,17 +1421,21 @@ const Admin = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {contactSubmissions.length === 0 ? (
+                    {filteredContactSubmissions.length === 0 ? (
                       <TableRow>
                         <TableCell colSpan={7} className="text-center py-8">
                           <div className="flex flex-col items-center justify-center space-y-3">
                             <Mail className="h-8 w-8 text-muted-foreground" />
-                            <div className="text-muted-foreground">No contact submissions yet</div>
+                            <div className="text-muted-foreground">
+                              {contactStatusFilter === 'all' 
+                                ? "No contact submissions yet" 
+                                : `No ${contactStatusFilter} submissions found`}
+                            </div>
                           </div>
                         </TableCell>
                       </TableRow>
                     ) : (
-                      contactSubmissions.map((submission) => (
+                      filteredContactSubmissions.map((submission) => (
                         <TableRow key={submission.id}>
                           <TableCell className="font-medium">{submission.name}</TableCell>
                           <TableCell>{submission.email}</TableCell>
