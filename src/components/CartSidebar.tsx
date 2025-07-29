@@ -239,58 +239,68 @@ export const CartSidebar = ({ isOpen, onClose, userId, onCartUpdate }: CartSideb
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent className="w-full sm:max-w-lg">
-        <SheetHeader>
-          <SheetTitle className="flex items-center gap-2">
-            <ShoppingCart className="h-5 w-5" />
-            Shopping Cart
+      <SheetContent className="w-full sm:max-w-lg bg-gradient-to-br from-purple-50 to-pink-50 border-l-4 border-l-purple-300">
+        <SheetHeader className="pb-6">
+          <SheetTitle className="flex items-center gap-3 text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <div className="p-2 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full">
+              <ShoppingCart className="h-6 w-6 text-purple-600" />
+            </div>
+            🛒 Shopping Cart
             {cartItems.length > 0 && (
-              <Badge variant="secondary">{getTotalItems()} items</Badge>
+              <Badge className="bg-gradient-to-r from-yellow-400 to-orange-400 text-purple-800 font-bold shadow-lg animate-pulse">
+                {getTotalItems()} toys
+              </Badge>
             )}
           </SheetTitle>
-          <SheetDescription>
-            Review your items before checkout
+          <SheetDescription className="text-purple-600 font-medium">
+            ✨ Review your amazing toys before checkout! 🎁
           </SheetDescription>
         </SheetHeader>
 
         <div className="mt-6 flex-1 flex flex-col">
           {cartItems.length === 0 ? (
-            <div className="flex-1 flex flex-col items-center justify-center text-center py-12">
-              <ShoppingCart className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-semibold">Your cart is empty</h3>
-              <p className="text-muted-foreground">Add some products to get started</p>
+            <div className="flex-1 flex flex-col items-center justify-center text-center py-12 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl border-2 border-dashed border-purple-200 mx-2">
+              <div className="relative">
+                <div className="absolute -top-2 -right-2 text-2xl animate-bounce">🎈</div>
+                <ShoppingCart className="h-16 w-16 text-purple-400 mb-4" />
+                <div className="absolute -bottom-2 -left-2 text-2xl animate-pulse">🧸</div>
+              </div>
+              <h3 className="text-xl font-bold text-purple-600 mb-2">Your cart is empty! 🛒</h3>
+              <p className="text-purple-500 font-medium">Add some amazing toys to get started! ✨</p>
+              <div className="mt-4 text-3xl">🎁 🚂 🎀 🏈</div>
             </div>
           ) : (
             <>
               <ScrollArea className="flex-1 -mx-6 px-6">
                 <div className="space-y-4">
                   {cartItems.map((item) => (
-                    <div key={item.product_id} className="flex gap-4 py-4">
+                    <div key={item.product_id} className="flex gap-4 py-4 bg-white rounded-xl shadow-lg border border-purple-100 hover:shadow-xl transition-all duration-300 p-4">
                       <div className="relative">
                         <img
                           src={item.product.image_url || "/placeholder.svg"}
                           alt={item.product.name}
-                          className="w-16 h-16 object-cover rounded-md"
+                          className="w-20 h-20 object-cover rounded-xl border-2 border-purple-200 shadow-md"
                         />
+                        <div className="absolute -top-1 -right-1 text-sm">🎀</div>
                       </div>
-                      <div className="flex-1 space-y-2">
-                        <h4 className="font-medium text-sm leading-tight">
+                      <div className="flex-1 space-y-3">
+                        <h4 className="font-bold text-purple-800 leading-tight text-base">
                           {item.product.name}
                         </h4>
                         <div className="flex items-center justify-between">
-                          <div className="flex flex-col">
-                            <span className="text-sm font-semibold">
+                          <div className="flex flex-col gap-1">
+                            <span className="text-lg font-bold text-purple-600">
                               ₹{item.product.price.toFixed(2)}
                             </span>
-                            <span className="text-xs text-muted-foreground">
-                              {item.product.stock_quantity} available
+                            <span className="text-xs text-purple-400 font-medium bg-purple-50 px-2 py-1 rounded-full">
+                              📦 {item.product.stock_quantity} available
                             </span>
                           </div>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 bg-purple-50 rounded-full p-1">
                             <Button
                               variant="outline"
                               size="icon"
-                              className="h-8 w-8"
+                              className="h-8 w-8 rounded-full border-2 border-purple-300 text-purple-600 hover:bg-purple-100 hover:border-purple-400"
                               onClick={() => updateQuantity(
                                 userId ? item.id : item.product_id, 
                                 item.quantity - 1, 
@@ -299,13 +309,13 @@ export const CartSidebar = ({ isOpen, onClose, userId, onCartUpdate }: CartSideb
                             >
                               <Minus className="h-3 w-3" />
                             </Button>
-                            <span className="w-8 text-center text-sm">
+                            <span className="w-8 text-center text-sm font-bold text-purple-700 bg-white rounded-full py-1">
                               {item.quantity}
                             </span>
                             <Button
                               variant="outline"
                               size="icon"
-                              className="h-8 w-8"
+                              className="h-8 w-8 rounded-full border-2 border-purple-300 text-purple-600 hover:bg-purple-100 hover:border-purple-400"
                               onClick={() => updateQuantity(
                                 userId ? item.id : item.product_id, 
                                 item.quantity + 1, 
@@ -318,7 +328,7 @@ export const CartSidebar = ({ isOpen, onClose, userId, onCartUpdate }: CartSideb
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-8 w-8 text-destructive hover:text-destructive"
+                              className="h-8 w-8 rounded-full text-red-500 hover:text-red-600 hover:bg-red-50"
                               onClick={() => removeItem(
                                 userId ? item.id : item.product_id, 
                                 !userId
@@ -334,29 +344,37 @@ export const CartSidebar = ({ isOpen, onClose, userId, onCartUpdate }: CartSideb
                 </div>
               </ScrollArea>
 
-              <div className="space-y-4 pt-4 border-t">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span>Subtotal:</span>
-                    <span>₹{getTotalPrice().toFixed(2)}</span>
+              <div className="space-y-4 pt-6 border-t-2 border-purple-200 bg-gradient-to-br from-white to-purple-50 rounded-2xl p-4 mx-2 shadow-lg">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between text-purple-700 font-semibold">
+                    <span className="flex items-center gap-2">
+                      🧮 Subtotal:
+                    </span>
+                    <span className="text-lg">₹{getTotalPrice().toFixed(2)}</span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span>Delivery Charge:</span>
+                  <div className="flex items-center justify-between text-purple-600 font-medium">
+                    <span className="flex items-center gap-2">
+                      🚚 Delivery Charge:
+                    </span>
                     <span>₹{getDeliveryCharge().toFixed(2)}</span>
                   </div>
-                  <div className="flex items-center justify-between text-lg font-semibold border-t pt-2">
-                    <span>Total:</span>
-                    <span>₹{getFinalTotal().toFixed(2)}</span>
+                  <div className="flex items-center justify-between text-xl font-bold border-t-2 border-purple-200 pt-3 text-purple-800">
+                    <span className="flex items-center gap-2">
+                      💝 Total:
+                    </span>
+                    <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                      ₹{getFinalTotal().toFixed(2)}
+                    </span>
                   </div>
                 </div>
                 <Button
-                  className="w-full btn-premium"
+                  className="w-full bg-gradient-to-r from-yellow-400 to-orange-400 text-purple-800 hover:from-yellow-500 hover:to-orange-500 font-bold shadow-lg transform hover:scale-[1.02] transition-all duration-200 rounded-full border-none h-12 text-lg"
                   onClick={() => {
                     onClose();
                     navigate("/checkout");
                   }}
                 >
-                  Proceed to Checkout
+                  🎉 Proceed to Checkout 🛒
                 </Button>
               </div>
             </>

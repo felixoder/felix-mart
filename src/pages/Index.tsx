@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { User, Session } from "@supabase/supabase-js";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { ProductCard } from "@/components/ProductCard";
 import { CartSidebar } from "@/components/CartSidebar";
@@ -46,6 +47,7 @@ interface Product {
 }
 
 const Index = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
@@ -197,6 +199,47 @@ const Index = () => {
     }
   };
 
+  const animateToCart = (productImage: string, sourceElement: HTMLElement) => {
+    // Only animate if cart is not open
+    if (isCartOpen) return;
+    
+    const cartButton = document.getElementById('cart-button');
+    if (!cartButton) return;
+
+    // Get source and target positions
+    const sourceRect = sourceElement.getBoundingClientRect();
+    const targetRect = cartButton.getBoundingClientRect();
+
+    // Create clone element
+    const clone = document.createElement('img');
+    clone.src = productImage;
+    clone.className = 'cart-animation-clone';
+    clone.style.width = '60px';
+    clone.style.height = '60px';
+    clone.style.left = `${sourceRect.left + sourceRect.width / 2 - 30}px`;
+    clone.style.top = `${sourceRect.top + sourceRect.height / 2 - 30}px`;
+
+    document.body.appendChild(clone);
+
+    // Trigger cart button pulse
+    cartButton.classList.add('cart-pulse');
+    setTimeout(() => cartButton.classList.remove('cart-pulse'), 600);
+
+    // Animate to cart
+    requestAnimationFrame(() => {
+      clone.style.left = `${targetRect.left + targetRect.width / 2 - 15}px`;
+      clone.style.top = `${targetRect.top + targetRect.height / 2 - 15}px`;
+      clone.classList.add('animate');
+    });
+
+    // Remove clone after animation
+    setTimeout(() => {
+      if (clone.parentNode) {
+        clone.parentNode.removeChild(clone);
+      }
+    }, 800);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar
@@ -235,11 +278,20 @@ const Index = () => {
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="bg-gradient-to-r from-yellow-400 to-orange-400 text-purple-800 hover:from-yellow-500 hover:to-orange-500 font-bold text-lg shadow-lg transform hover:scale-105 transition-all duration-300 rounded-full border-2 border-white/20">
+                <Button 
+                  size="lg" 
+                  onClick={() => navigate('/products')}
+                  className="bg-gradient-to-r from-yellow-400 to-orange-400 text-purple-800 hover:from-yellow-500 hover:to-orange-500 font-bold text-lg shadow-lg transform hover:scale-105 transition-all duration-300 rounded-full border-2 border-white/20"
+                >
                   <ShoppingBag className="mr-2 h-5 w-5" />
                   🎁 Shop Toys Now
                 </Button>
-                <Button size="lg" variant="outline" className="border-2 border-white text-white bg-white/10 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white hover:border-transparent font-bold text-lg rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 backdrop-blur-sm">
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  onClick={() => navigate('/privacy-policy')}
+                  className="border-2 border-white text-white bg-white/10 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white hover:border-transparent font-bold text-lg rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 backdrop-blur-sm"
+                >
                   🤔 Learn More
                 </Button>
               </div>
@@ -280,7 +332,7 @@ const Index = () => {
 
       {/* Featured Products - Moved before Features */}
       <section className="py-16 bg-white">
-        <div className="full-width-container px-4 sm:px-6 lg:px-8 xl:px-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-12">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-purple-600">
@@ -288,14 +340,19 @@ const Index = () => {
               </h2>
               <p className="text-lg text-gray-600">Discover the toys that make babies giggle with joy! 😄✨</p>
             </div>
-            <Button variant="outline" className="hidden md:flex border-2 border-purple-300 text-purple-600 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-300 rounded-full">
+            <Button 
+              variant="outline" 
+              onClick={() => navigate('/products')}
+              className="hidden lg:flex border-2 border-purple-300 text-purple-600 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-300 rounded-full"
+            >
               🔍 View All Toys <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
 
-          {/* Search and Filters */}
-          <div className="mb-8 space-y-4">
-            <div className="relative max-w-md">
+          {/* Search and Filters - Aligned with product grid */}
+          <div className="mb-8 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            {/* Search bar aligned with grid */}
+            <div className="relative w-full max-w-md lg:max-w-lg">
               <Search className="absolute left-3 top-3 h-4 w-4 text-purple-400" />
               <Input
                 placeholder="🔍 Search for amazing toys..."
@@ -305,7 +362,21 @@ const Index = () => {
               />
             </div>
             
-            <div className="flex flex-wrap gap-2">
+            {/* View All button for mobile - aligned with search */}
+            <div className="lg:hidden">
+              <Button 
+                variant="outline" 
+                onClick={() => navigate('/products')}
+                className="w-full border-2 border-purple-300 text-purple-600 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-300 rounded-full"
+              >
+                🔍 View All Toys <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          
+          {/* Category filters - full width aligned with grid */}
+          <div className="mb-8">
+            <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
               <Button
                 variant={selectedCategory === "all" ? "default" : "outline"}
                 onClick={() => setSelectedCategory("all")}
@@ -358,6 +429,7 @@ const Index = () => {
                   key={product.id}
                   product={product}
                   onAddToCart={handleAddToCart}
+                  onAnimateToCart={animateToCart}
                   loading={loading}
                 />
               ))}

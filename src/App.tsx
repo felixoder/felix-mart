@@ -10,6 +10,7 @@ import Checkout from "./pages/Checkout";
 import Products from "./pages/Products";
 import Orders from "./pages/Orders";
 import OrderSuccess from "./pages/OrderSuccess";
+import Profile from "./pages/Profile";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import RefundPolicy from "./pages/RefundPolicy";
@@ -35,6 +36,7 @@ const App = () => (
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/products" element={<Products />} />
           <Route path="/orders" element={<Orders />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />

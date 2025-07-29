@@ -94,157 +94,164 @@ export const AuthForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 gradient-hero">
-      <div className="absolute inset-0 bg-black/20"></div>
-      <Card className="w-full max-w-md glass relative z-10">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <Store className="h-12 w-12 text-white glow" />
+    <Card className="w-full max-w-md bg-white/95 backdrop-blur-lg border-2 border-purple-200 shadow-2xl rounded-3xl overflow-hidden">
+      <CardHeader className="text-center bg-gradient-to-br from-purple-50 to-pink-50 pb-8">
+        <div className="flex justify-center mb-4">
+          <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-4 rounded-full shadow-lg">
+            <Store className="h-8 w-8 text-white" />
           </div>
-          <CardTitle className="text-2xl font-bold text-white">Premium Store</CardTitle>
-          <CardDescription className="text-white/80">
-            Access your premium shopping experience
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 glass">
-              <TabsTrigger value="signin" className="text-white data-[state=active]:bg-white/20 data-[state=inactive]:text-inactive-tab-foreground">
-                Sign In
-              </TabsTrigger>
-              <TabsTrigger value="signup" className="text-white data-[state=active]:bg-white/20 data-[state=inactive]:text-inactive-tab-foreground">
-                Sign Up
-              </TabsTrigger>
-            </TabsList>
+        </div>
+        <CardTitle className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          🎈 felixmart
+        </CardTitle>
+        <CardDescription className="text-gray-600 mt-2">
+          Join the magical world of baby toys! 🧸✨
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="p-6">
+        <Tabs defaultValue="signin" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 bg-purple-100 rounded-full p-1 mb-6">
+            <TabsTrigger 
+              value="signin" 
+              className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-500 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-300"
+            >
+              Sign In
+            </TabsTrigger>
+            <TabsTrigger 
+              value="signup" 
+              className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-pink-500 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-300"
+            >
+              Sign Up
+            </TabsTrigger>
+          </TabsList>
             
-            <TabsContent value="signin">
-              <form onSubmit={handleSignIn} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-foreground">Email</Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-white/60" />
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="Enter your email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      className="pl-10 glass placeholder:text-white/60"
-                    />
-                  </div>
+          <TabsContent value="signin">
+            <form onSubmit={handleSignIn} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-purple-700 font-semibold">Email</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-purple-400" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="pl-10 border-purple-200 focus:border-purple-400 focus:ring-purple-200 rounded-xl"
+                  />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password" className="text-foreground">Password</Label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-3 h-4 w-4 text-white/60" />
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      className="pl-10 glass placeholder:text-white/60"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-3 text-white/60 z-10"
-                    >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-purple-700 font-semibold">Password</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-purple-400" />
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="pl-10 border-purple-200 focus:border-purple-400 focus:ring-purple-200 rounded-xl"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-3 text-purple-400 hover:text-purple-600 z-10"
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
                 </div>
-                <Button
-                  type="submit"
-                  className="w-full btn-glass"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Signing In...
-                    </>
-                  ) : (
-                    "Sign In"
-                  )}
-                </Button>
-              </form>
-            </TabsContent>
+              </div>
+              <Button
+                type="submit"
+                className="w-full bg-gradient-to-r from-yellow-400 to-orange-400 text-purple-800 hover:from-yellow-500 hover:to-orange-500 font-bold shadow-lg transform hover:scale-105 transition-all duration-300 rounded-full border-none h-12 text-lg mt-6"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    🎈 Signing In...
+                  </>
+                ) : (
+                  <>🧸 Sign In to felixmart</>
+                )}
+              </Button>
+            </form>
+          </TabsContent>
             
-            <TabsContent value="signup">
-              <form onSubmit={handleSignUp} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="fullName" className="text-foreground">Full Name</Label>
-                  <div className="relative">
-                    <Input
-                      id="fullName"
-                      type="text"
-                      placeholder="Enter your full name"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      required
-                      className="glass placeholder:text-white/60"
-                    />
-                  </div>
+          <TabsContent value="signup">
+            <form onSubmit={handleSignUp} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="fullName" className="text-purple-700 font-semibold">Full Name</Label>
+                <div className="relative">
+                  <Input
+                    id="fullName"
+                    type="text"
+                    placeholder="Enter your full name"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    required
+                    className="border-purple-200 focus:border-purple-400 focus:ring-purple-200 rounded-xl"
+                  />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-email" className="text-foreground">Email</Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-white/60" />
-                    <Input
-                      id="signup-email"
-                      type="email"
-                      placeholder="Enter your email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      className="pl-10 glass placeholder:text-white/60"
-                    />
-                  </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signup-email" className="text-purple-700 font-semibold">Email</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-purple-400" />
+                  <Input
+                    id="signup-email"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="pl-10 border-purple-200 focus:border-purple-400 focus:ring-purple-200 rounded-xl"
+                  />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password" className="text-foreground">Password</Label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-3 h-4 w-4 text-white/60" />
-                    <Input
-                      id="signup-password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Create a password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      className="pl-10 glass placeholder:text-white/60"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-3 text-white/60 z-10"
-                    >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signup-password" className="text-purple-700 font-semibold">Password</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-purple-400" />
+                  <Input
+                    id="signup-password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Create a password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="pl-10 border-purple-200 focus:border-purple-400 focus:ring-purple-200 rounded-xl"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-3 text-purple-400 hover:text-purple-600 z-10"
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
                 </div>
-                <Button
-                  type="submit"
-                  className="w-full btn-glass"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Creating Account...
-                    </>
-                  ) : (
-                    "Create Account"
-                  )}
-                </Button>
-              </form>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
-    </div>
+              </div>
+              <Button
+                type="submit"
+                className="w-full bg-gradient-to-r from-green-400 to-blue-400 text-white hover:from-green-500 hover:to-blue-500 font-bold shadow-lg transform hover:scale-105 transition-all duration-300 rounded-full border-none h-12 text-lg mt-6"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    🎨 Creating Account...
+                  </>
+                ) : (
+                  <>🎁 Create felixmart Account</>
+                )}
+              </Button>
+            </form>
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+    </Card>
   );
 };

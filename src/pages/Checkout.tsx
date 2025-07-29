@@ -279,72 +279,145 @@ const Checkout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50">
       <Navbar user={user} cartItemsCount={cartItems.length} onCartClick={() => {}} />
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-3xl font-bold mb-8">Checkout</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <Card>
-              <CardHeader>
-                <CardTitle>Shipping Information</CardTitle>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Hero Header */}
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white text-2xl mb-4">
+            🛒
+          </div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+            Almost There! 🎉
+          </h1>
+          <p className="text-gray-600 text-lg">
+            Just a few more steps to get your amazing toys! 🧸✨
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Shipping Information - Takes 2 columns on large screens */}
+          <div className="lg:col-span-2">
+            <Card className="shadow-xl border-0 bg-gradient-to-br from-white to-purple-50/30 overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+                <CardTitle className="flex items-center text-xl">
+                  <span className="mr-2">🚚</span>
+                  Shipping Information
+                </CardTitle>
               </CardHeader>
-              <CardContent>
-                <form className="space-y-4">
+              <CardContent className="p-6">
+                <form className="space-y-6">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Full Name</Label>
-                    <Input id="name" placeholder="Enter your full name" />
+                    <Label htmlFor="name" className="text-purple-700 font-semibold">
+                      📝 Full Name
+                    </Label>
+                    <Input 
+                      id="name" 
+                      placeholder="Enter your full name" 
+                      className="border-purple-200 focus:border-purple-400 focus:ring-purple-400 rounded-xl"
+                    />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="address">Address</Label>
-                    <Input id="address" placeholder="Enter your address" />
+                    <Label htmlFor="address" className="text-purple-700 font-semibold">
+                      🏠 Address
+                    </Label>
+                    <Input 
+                      id="address" 
+                      placeholder="Enter your complete address" 
+                      className="border-purple-200 focus:border-purple-400 focus:ring-purple-400 rounded-xl"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="city" className="text-purple-700 font-semibold">
+                        🏙️ City
+                      </Label>
+                      <Input 
+                        id="city" 
+                        placeholder="Enter your city" 
+                        className="border-purple-200 focus:border-purple-400 focus:ring-purple-400 rounded-xl"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="postalCode" className="text-purple-700 font-semibold">
+                        📮 Postal Code
+                      </Label>
+                      <Input 
+                        id="postalCode" 
+                        placeholder="Enter postal code" 
+                        className="border-purple-200 focus:border-purple-400 focus:ring-purple-400 rounded-xl"
+                      />
+                    </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="city">City</Label>
-                    <Input id="city" placeholder="Enter your city" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="postalCode">Postal Code</Label>
-                    <Input id="postalCode" placeholder="Enter your postal code" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number</Label>
-                    <Input id="phone" placeholder="Enter your phone number" />
+                    <Label htmlFor="phone" className="text-purple-700 font-semibold">
+                      📱 Phone Number
+                    </Label>
+                    <Input 
+                      id="phone" 
+                      placeholder="Enter your phone number" 
+                      className="border-purple-200 focus:border-purple-400 focus:ring-purple-400 rounded-xl"
+                    />
                   </div>
                 </form>
               </CardContent>
             </Card>
           </div>
-          <div>
-            <Card>
-              <CardHeader>
-                <CardTitle>Order Summary</CardTitle>
+
+          {/* Order Summary - Takes 1 column on large screens */}
+          <div className="lg:col-span-1">
+            <Card className="shadow-xl border-0 bg-gradient-to-br from-white to-yellow-50/30 overflow-hidden sticky top-8">
+              <CardHeader className="bg-gradient-to-r from-yellow-400 to-orange-400 text-purple-800">
+                <CardTitle className="flex items-center text-xl font-bold">
+                  <span className="mr-2">📋</span>
+                  Order Summary
+                </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-6">
                 {loading ? (
-                  <p>Loading...</p>
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500 mx-auto mb-4"></div>
+                    <p className="text-purple-600">Loading your cart... 🛍️</p>
+                  </div>
                 ) : (
                   <>
-                    {cartItems.map((item) => (
-                      <div key={item.id} className="flex justify-between items-center mb-4">
-                        <div>
-                          <p className="font-medium">{item.name}</p>
-                          <p className="text-sm text-muted-foreground">Quantity: {item.quantity}</p>
+                    <div className="space-y-4 mb-6">
+                      {cartItems.map((item) => (
+                        <div key={item.id} className="flex items-center space-x-3 p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-100">
+                          <img
+                            src={item.image_url || "/placeholder.svg"}
+                            alt={item.name}
+                            className="w-12 h-12 object-cover rounded-lg"
+                          />
+                          <div className="flex-1">
+                            <p className="font-semibold text-purple-800 text-sm">{item.name}</p>
+                            <p className="text-xs text-purple-600">Qty: {item.quantity}</p>
+                          </div>
+                          <p className="font-bold text-purple-700">₹{(item.price * item.quantity).toFixed(2)}</p>
                         </div>
-                        <p>₹{(item.price * item.quantity).toFixed(2)}</p>
+                      ))}
+                    </div>
+                    
+                    <div className="border-t border-purple-200 pt-4 space-y-3">
+                      <div className="flex justify-between text-purple-700">
+                        <p className="flex items-center">
+                          <span className="mr-1">🛍️</span>
+                          Subtotal
+                        </p>
+                        <p className="font-semibold">₹{subtotal.toFixed(2)}</p>
                       </div>
-                    ))}
-                    <div className="border-t pt-4 mt-4 space-y-2">
-                      <div className="flex justify-between">
-                        <p>Subtotal</p>
-                        <p>₹{subtotal.toFixed(2)}</p>
+                      <div className="flex justify-between text-purple-700">
+                        <p className="flex items-center">
+                          <span className="mr-1">🚚</span>
+                          Delivery Charge
+                        </p>
+                        <p className="font-semibold">₹{deliveryCharge.toFixed(2)}</p>
                       </div>
-                      <div className="flex justify-between">
-                        <p>Delivery Charge</p>
-                        <p>₹{deliveryCharge.toFixed(2)}</p>
-                      </div>
-                      <div className="flex justify-between font-bold text-lg border-t pt-2">
-                        <p>Total</p>
+                      <div className="flex justify-between font-bold text-lg text-purple-800 border-t border-purple-200 pt-3 bg-gradient-to-r from-yellow-100 to-orange-100 p-3 rounded-xl">
+                        <p className="flex items-center">
+                          <span className="mr-1">💰</span>
+                          Total
+                        </p>
                         <p>₹{total.toFixed(2)}</p>
                       </div>
                     </div>
@@ -352,9 +425,29 @@ const Checkout = () => {
                 )}
               </CardContent>
             </Card>
-            <Button className="w-full mt-4 btn-premium" onClick={handlePayment}>
-              Proceed to Payment
+            
+            <Button 
+              className="w-full mt-6 h-14 text-lg font-bold bg-gradient-to-r from-green-400 to-blue-400 hover:from-green-500 hover:to-blue-500 text-white shadow-xl rounded-xl transform hover:scale-105 transition-all duration-300 border-none"
+              onClick={handlePayment}
+              disabled={loading}
+            >
+              <span className="mr-2">💳</span>
+              {loading ? "Processing..." : "Proceed to Payment 🚀"}
             </Button>
+            
+            {/* Trust Indicators */}
+            <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-xl border border-green-200">
+              <div className="flex items-center justify-center space-x-4 text-sm text-green-700">
+                <div className="flex items-center">
+                  <span className="mr-1">🔒</span>
+                  Secure Payment
+                </div>
+                <div className="flex items-center">
+                  <span className="mr-1">🛡️</span>
+                  Safe & Protected
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -82,16 +82,14 @@ export const Navbar = ({ user, cartItemsCount, onCartClick }: NavbarProps) => {
       >
         Home
       </a>
-      {isAdmin && (
-        <a
-          href="/products"
-          className={`${
-            mobile ? "block py-2" : "inline-flex"
-          } text-white hover:text-white/80 transition-colors`}
-        >
-          Products
-        </a>
-      )}
+      <a
+        href="/products"
+        className={`${
+          mobile ? "block py-2" : "inline-flex"
+        } text-white hover:text-white/80 transition-colors`}
+      >
+        Products
+      </a>
       {user && (
         <a
           href="/orders"
@@ -120,12 +118,15 @@ export const Navbar = ({ user, cartItemsCount, onCartClick }: NavbarProps) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <a 
+            href="/" 
+            className="flex items-center space-x-2 hover:opacity-90 transition-opacity cursor-pointer"
+          >
             <div className="bg-white/20 p-1 rounded-full">
               <Store className="h-6 w-6 text-white" />
             </div>
             <span className="text-xl font-bold text-white">🎈 FelixMart</span>
-          </div>
+          </a>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
@@ -135,6 +136,7 @@ export const Navbar = ({ user, cartItemsCount, onCartClick }: NavbarProps) => {
           {/* Right side */}
           <div className="flex items-center space-x-4">
             <Button
+              id="cart-button"
               variant="ghost"
               size="icon"
               onClick={onCartClick}
@@ -156,11 +158,11 @@ export const Navbar = ({ user, cartItemsCount, onCartClick }: NavbarProps) => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => window.location.href = "/profile"}>
                     <UserIcon className="mr-2 h-4 w-4" />
                     <span>Profile</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => window.location.href = "/profile"}>
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Settings</span>
                   </DropdownMenuItem>
@@ -174,9 +176,9 @@ export const Navbar = ({ user, cartItemsCount, onCartClick }: NavbarProps) => {
             ) : (
               <Button
                 onClick={() => window.location.href = "/auth"}
-                className="btn-glass"
+                className="bg-gradient-to-r from-yellow-400 to-orange-400 text-purple-800 hover:from-yellow-500 hover:to-orange-500 font-bold shadow-lg transform hover:scale-105 transition-all duration-300 rounded-full border-none"
               >
-                Sign In
+                🧸 Sign In
               </Button>
             )}
 

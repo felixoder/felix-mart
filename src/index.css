@@ -150,18 +150,91 @@ All colors MUST be HSL.
   }
 }
 
+/* Baby toy themed utilities */
+.font-rounded {
+  font-family: 'Comic Sans MS', 'Marker Felt', 'Trebuchet MS', cursive, sans-serif;
+}
+
+.toy-bounce {
+  animation: toy-bounce 2s infinite;
+}
+
+.toy-wiggle {
+  animation: toy-wiggle 1s ease-in-out infinite;
+}
+
+.toy-float {
+  animation: toy-float 3s ease-in-out infinite;
+}
+
+@keyframes toy-bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes toy-wiggle {
+  0%, 100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes toy-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 /* Product grid utilities */
 .product-grid {
-  @apply grid gap-8;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  @apply grid gap-6 justify-center;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   grid-auto-rows: 1fr;
   align-items: start;
+  max-width: 100%;
 }
 
 .product-card {
   @apply h-full w-full min-w-0;
   contain: layout style paint;
   isolation: isolate;
+  max-width: 360px; /* Prevent cards from becoming too wide */
+  margin: 0 auto; /* Center cards within their grid cells */
+  min-height: 500px; /* Ensure consistent minimum height */
+}
+
+/* Search and filter alignment with product grid */
+.search-filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .search-filter-container {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  /* Align product grid with search/filter section */
+  .product-grid {
+    justify-content: flex-start;
+    gap: 2rem;
+  }
 }
 
 /* Ensure full width containers */
@@ -174,7 +247,18 @@ All colors MUST be HSL.
 @media (max-width: 640px) {
   .product-grid {
     grid-template-columns: 1fr;
-    gap: 6rem 1rem;
+    gap: 1.5rem;
+    justify-items: center;
+    padding: 0 1rem;
+  }
+  
+  .product-card {
+    max-width: 300px;
+    min-height: 480px;
+  }
+  
+  .search-filter-container {
+    align-items: stretch;
   }
 }
 
@@ -182,6 +266,12 @@ All colors MUST be HSL.
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
+    justify-items: center;
+  }
+  
+  .product-card {
+    max-width: 320px;
+    min-height: 500px;
   }
 }
 
@@ -189,12 +279,66 @@ All colors MUST be HSL.
   .product-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
+    justify-items: center;
+  }
+  
+  .product-card {
+    max-width: 300px;
+    min-height: 520px;
   }
 }
 
 @media (min-width: 1025px) {
   .product-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 300px));
     gap: 2rem;
+    justify-content: flex-start; /* Align with search/filter */
+    margin-left: 0; /* Remove centering margin for desktop */
+  }
+  
+  .product-card {
+    max-width: 300px;
+    min-height: 540px;
   }
 }
+
+/* Products page centered grid */
+.products-page .product-grid {
+  justify-content: center !important;
+  justify-items: center;
+}
+
+@media (min-width: 1025px) {
+  .products-page .product-grid {
+    justify-content: center !important;
+    margin: 0 auto;
+  }
+}
+
+/* Add to Cart Animation */
+.cart-animation-clone {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.cart-animation-clone.animate {
+  transform: scale(0.3);
+  opacity: 0;
+}
+
+/* Cart pulse animation */
+.cart-pulse {
+  animation: cart-bounce 0.6s ease-in-out;
+}
+
+@keyframes cart-bounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Floating shapes animation */
